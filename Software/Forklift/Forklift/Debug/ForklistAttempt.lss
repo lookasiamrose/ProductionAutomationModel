@@ -1,0 +1,3475 @@
+
+ForklistAttempt.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000151a  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000158e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          000001c3  00800060  00800060  0000158e  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000158e  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000015c0  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000178  00000000  00000000  000015fc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   000026b4  00000000  00000000  00001774  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000d32  00000000  00000000  00003e28  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000010ee  00000000  00000000  00004b5a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000514  00000000  00000000  00005c48  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000a83  00000000  00000000  0000615c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00001414  00000000  00000000  00006bdf  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000140  00000000  00000000  00007ff3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+       0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+       4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+       8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+       c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      18:	0c 94 d4 04 	jmp	0x9a8	; 0x9a8 <__vector_6>
+      1c:	0c 94 8b 03 	jmp	0x716	; 0x716 <__vector_7>
+      20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      24:	0c 94 37 09 	jmp	0x126e	; 0x126e <__vector_9>
+      28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      2c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__vector_11>
+      30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      38:	0c 94 4f 04 	jmp	0x89e	; 0x89e <__vector_14>
+      3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+      50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+      54:	11 24       	eor	r1, r1
+      56:	1f be       	out	0x3f, r1	; 63
+      58:	cf e5       	ldi	r28, 0x5F	; 95
+      5a:	d4 e0       	ldi	r29, 0x04	; 4
+      5c:	de bf       	out	0x3e, r29	; 62
+      5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+      60:	22 e0       	ldi	r18, 0x02	; 2
+      62:	a0 e6       	ldi	r26, 0x60	; 96
+      64:	b0 e0       	ldi	r27, 0x00	; 0
+      66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+      68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+      6a:	a3 32       	cpi	r26, 0x23	; 35
+      6c:	b2 07       	cpc	r27, r18
+      6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+      70:	0e 94 49 01 	call	0x292	; 0x292 <main>
+      74:	0c 94 8b 0a 	jmp	0x1516	; 0x1516 <_exit>
+
+00000078 <__bad_interrupt>:
+      78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <__vector_11>:
+#include "orders.h" 
+
+volatile char command[8];
+
+ISR(USART_RXC_vect)
+{
+      7c:	1f 92       	push	r1
+      7e:	0f 92       	push	r0
+      80:	0f b6       	in	r0, 0x3f	; 63
+      82:	0f 92       	push	r0
+      84:	11 24       	eor	r1, r1
+      86:	cf 92       	push	r12
+      88:	df 92       	push	r13
+      8a:	ef 92       	push	r14
+      8c:	0f 93       	push	r16
+      8e:	1f 93       	push	r17
+      90:	2f 93       	push	r18
+      92:	3f 93       	push	r19
+      94:	4f 93       	push	r20
+      96:	5f 93       	push	r21
+      98:	6f 93       	push	r22
+      9a:	7f 93       	push	r23
+      9c:	8f 93       	push	r24
+      9e:	9f 93       	push	r25
+      a0:	af 93       	push	r26
+      a2:	bf 93       	push	r27
+      a4:	cf 93       	push	r28
+      a6:	df 93       	push	r29
+      a8:	ef 93       	push	r30
+      aa:	ff 93       	push	r31
+	command[0] = command[1];
+      ac:	eb ed       	ldi	r30, 0xDB	; 219
+      ae:	f0 e0       	ldi	r31, 0x00	; 0
+      b0:	81 81       	ldd	r24, Z+1	; 0x01
+      b2:	80 83       	st	Z, r24
+	command[1] = command[2];
+      b4:	82 81       	ldd	r24, Z+2	; 0x02
+      b6:	81 83       	std	Z+1, r24	; 0x01
+	command[2] = command[3];
+      b8:	83 81       	ldd	r24, Z+3	; 0x03
+      ba:	82 83       	std	Z+2, r24	; 0x02
+	command[3] = command[4];
+      bc:	84 81       	ldd	r24, Z+4	; 0x04
+      be:	83 83       	std	Z+3, r24	; 0x03
+	command[4] = command[5];
+      c0:	85 81       	ldd	r24, Z+5	; 0x05
+      c2:	84 83       	std	Z+4, r24	; 0x04
+	command[5] = command[6];
+      c4:	86 81       	ldd	r24, Z+6	; 0x06
+      c6:	85 83       	std	Z+5, r24	; 0x05
+	command[6] = command[7];
+      c8:	87 81       	ldd	r24, Z+7	; 0x07
+      ca:	86 83       	std	Z+6, r24	; 0x06
+	command[7] = UDR;
+      cc:	8c b1       	in	r24, 0x0c	; 12
+      ce:	87 83       	std	Z+7, r24	; 0x07
+	
+	if(command[7] == '.')
+      d0:	87 81       	ldd	r24, Z+7	; 0x07
+      d2:	8e 32       	cpi	r24, 0x2E	; 46
+      d4:	09 f0       	breq	.+2      	; 0xd8 <__vector_11+0x5c>
+      d6:	9f c0       	rjmp	.+318    	; 0x216 <__vector_11+0x19a>
+	{
+		enum StepperDirection dir = UNDEFINED;
+		if(command[1] == '<') dir = COUNTERCLOCKWISE;
+      d8:	80 91 dc 00 	lds	r24, 0x00DC	; 0x8000dc <command+0x1>
+      dc:	8c 33       	cpi	r24, 0x3C	; 60
+      de:	31 f0       	breq	.+12     	; 0xec <__vector_11+0x70>
+			else
+				if(command[1] == '>')	dir = CLOCKWISE;
+      e0:	80 91 dc 00 	lds	r24, 0x00DC	; 0x8000dc <command+0x1>
+      e4:	8e 33       	cpi	r24, 0x3E	; 62
+      e6:	21 f4       	brne	.+8      	; 0xf0 <__vector_11+0x74>
+      e8:	10 e0       	ldi	r17, 0x00	; 0
+      ea:	03 c0       	rjmp	.+6      	; 0xf2 <__vector_11+0x76>
+	command[7] = UDR;
+	
+	if(command[7] == '.')
+	{
+		enum StepperDirection dir = UNDEFINED;
+		if(command[1] == '<') dir = COUNTERCLOCKWISE;
+      ec:	11 e0       	ldi	r17, 0x01	; 1
+      ee:	01 c0       	rjmp	.+2      	; 0xf2 <__vector_11+0x76>
+	command[6] = command[7];
+	command[7] = UDR;
+	
+	if(command[7] == '.')
+	{
+		enum StepperDirection dir = UNDEFINED;
+      f0:	12 e0       	ldi	r17, 0x02	; 2
+		if(command[1] == '<') dir = COUNTERCLOCKWISE;
+			else
+				if(command[1] == '>')	dir = CLOCKWISE;
+		uint16_t steps = 0;
+		steps = 0xff & command[3];
+      f2:	eb ed       	ldi	r30, 0xDB	; 219
+      f4:	f0 e0       	ldi	r31, 0x00	; 0
+      f6:	63 81       	ldd	r22, Z+3	; 0x03
+      f8:	70 e0       	ldi	r23, 0x00	; 0
+		steps <<= 8;
+      fa:	76 2f       	mov	r23, r22
+      fc:	66 27       	eor	r22, r22
+		steps |= 0xff & command[2];
+      fe:	82 81       	ldd	r24, Z+2	; 0x02
+     100:	eb 01       	movw	r28, r22
+     102:	c8 2b       	or	r28, r24
+		switch(command[0])
+     104:	80 81       	ld	r24, Z
+     106:	8d 36       	cpi	r24, 0x6D	; 109
+     108:	81 f0       	breq	.+32     	; 0x12a <__vector_11+0xae>
+     10a:	30 f4       	brcc	.+12     	; 0x118 <__vector_11+0x9c>
+     10c:	82 36       	cpi	r24, 0x62	; 98
+     10e:	09 f4       	brne	.+2      	; 0x112 <__vector_11+0x96>
+     110:	74 c0       	rjmp	.+232    	; 0x1fa <__vector_11+0x17e>
+     112:	8c 36       	cpi	r24, 0x6C	; 108
+     114:	f1 f0       	breq	.+60     	; 0x152 <__vector_11+0xd6>
+     116:	a5 c0       	rjmp	.+330    	; 0x262 <__vector_11+0x1e6>
+     118:	84 37       	cpi	r24, 0x74	; 116
+     11a:	09 f4       	brne	.+2      	; 0x11e <__vector_11+0xa2>
+     11c:	42 c0       	rjmp	.+132    	; 0x1a2 <__vector_11+0x126>
+     11e:	85 37       	cpi	r24, 0x75	; 117
+     120:	61 f1       	breq	.+88     	; 0x17a <__vector_11+0xfe>
+     122:	83 37       	cpi	r24, 0x73	; 115
+     124:	09 f0       	breq	.+2      	; 0x128 <__vector_11+0xac>
+     126:	9d c0       	rjmp	.+314    	; 0x262 <__vector_11+0x1e6>
+     128:	50 c0       	rjmp	.+160    	; 0x1ca <__vector_11+0x14e>
+		{
+			case 'm':
+				stepper_push_back_order(MOVE,steps,dir,command[4],command[5],orders_get_barrier_from_char(command[6]));
+     12a:	0f 2e       	mov	r0, r31
+     12c:	fb ed       	ldi	r31, 0xDB	; 219
+     12e:	cf 2e       	mov	r12, r31
+     130:	f0 e0       	ldi	r31, 0x00	; 0
+     132:	df 2e       	mov	r13, r31
+     134:	f0 2d       	mov	r31, r0
+     136:	f6 01       	movw	r30, r12
+     138:	86 81       	ldd	r24, Z+6	; 0x06
+     13a:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     13e:	f6 01       	movw	r30, r12
+     140:	05 81       	ldd	r16, Z+5	; 0x05
+     142:	24 81       	ldd	r18, Z+4	; 0x04
+     144:	e8 2e       	mov	r14, r24
+     146:	41 2f       	mov	r20, r17
+     148:	be 01       	movw	r22, r28
+     14a:	83 e0       	ldi	r24, 0x03	; 3
+     14c:	0e 94 b8 09 	call	0x1370	; 0x1370 <stepper_push_back_order>
+			break;
+     150:	88 c0       	rjmp	.+272    	; 0x262 <__vector_11+0x1e6>
+			case 'l':
+				stepper_push_back_order(LEFTRIGHT,steps,dir,command[4],command[5],orders_get_barrier_from_char(command[6]));
+     152:	0f 2e       	mov	r0, r31
+     154:	fb ed       	ldi	r31, 0xDB	; 219
+     156:	cf 2e       	mov	r12, r31
+     158:	f0 e0       	ldi	r31, 0x00	; 0
+     15a:	df 2e       	mov	r13, r31
+     15c:	f0 2d       	mov	r31, r0
+     15e:	f6 01       	movw	r30, r12
+     160:	86 81       	ldd	r24, Z+6	; 0x06
+     162:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     166:	f6 01       	movw	r30, r12
+     168:	05 81       	ldd	r16, Z+5	; 0x05
+     16a:	24 81       	ldd	r18, Z+4	; 0x04
+     16c:	e8 2e       	mov	r14, r24
+     16e:	41 2f       	mov	r20, r17
+     170:	be 01       	movw	r22, r28
+     172:	82 e0       	ldi	r24, 0x02	; 2
+     174:	0e 94 b8 09 	call	0x1370	; 0x1370 <stepper_push_back_order>
+			break;
+     178:	74 c0       	rjmp	.+232    	; 0x262 <__vector_11+0x1e6>
+			case 'u':
+				stepper_push_back_order(UPDOWN,steps,dir,command[4],command[5],orders_get_barrier_from_char(command[6]));
+     17a:	0f 2e       	mov	r0, r31
+     17c:	fb ed       	ldi	r31, 0xDB	; 219
+     17e:	cf 2e       	mov	r12, r31
+     180:	f0 e0       	ldi	r31, 0x00	; 0
+     182:	df 2e       	mov	r13, r31
+     184:	f0 2d       	mov	r31, r0
+     186:	f6 01       	movw	r30, r12
+     188:	86 81       	ldd	r24, Z+6	; 0x06
+     18a:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     18e:	f6 01       	movw	r30, r12
+     190:	05 81       	ldd	r16, Z+5	; 0x05
+     192:	24 81       	ldd	r18, Z+4	; 0x04
+     194:	e8 2e       	mov	r14, r24
+     196:	41 2f       	mov	r20, r17
+     198:	be 01       	movw	r22, r28
+     19a:	81 e0       	ldi	r24, 0x01	; 1
+     19c:	0e 94 b8 09 	call	0x1370	; 0x1370 <stepper_push_back_order>
+			break;
+     1a0:	60 c0       	rjmp	.+192    	; 0x262 <__vector_11+0x1e6>
+			case 't':
+				stepper_push_back_order(TURN,steps,dir,command[4],command[5],orders_get_barrier_from_char(command[6]));
+     1a2:	0f 2e       	mov	r0, r31
+     1a4:	fb ed       	ldi	r31, 0xDB	; 219
+     1a6:	cf 2e       	mov	r12, r31
+     1a8:	f0 e0       	ldi	r31, 0x00	; 0
+     1aa:	df 2e       	mov	r13, r31
+     1ac:	f0 2d       	mov	r31, r0
+     1ae:	f6 01       	movw	r30, r12
+     1b0:	86 81       	ldd	r24, Z+6	; 0x06
+     1b2:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     1b6:	f6 01       	movw	r30, r12
+     1b8:	05 81       	ldd	r16, Z+5	; 0x05
+     1ba:	24 81       	ldd	r18, Z+4	; 0x04
+     1bc:	e8 2e       	mov	r14, r24
+     1be:	41 2f       	mov	r20, r17
+     1c0:	be 01       	movw	r22, r28
+     1c2:	80 e0       	ldi	r24, 0x00	; 0
+     1c4:	0e 94 b8 09 	call	0x1370	; 0x1370 <stepper_push_back_order>
+			break;
+     1c8:	4c c0       	rjmp	.+152    	; 0x262 <__vector_11+0x1e6>
+			case 's':;
+				if(command[1] == 'S') 
+     1ca:	80 91 dc 00 	lds	r24, 0x00DC	; 0x8000dc <command+0x1>
+     1ce:	83 35       	cpi	r24, 0x53	; 83
+     1d0:	29 f4       	brne	.+10     	; 0x1dc <__vector_11+0x160>
+				{
+					servo_set_servo(PUSH,steps);
+     1d2:	be 01       	movw	r22, r28
+     1d4:	80 e0       	ldi	r24, 0x00	; 0
+     1d6:	0e 94 40 05 	call	0xa80	; 0xa80 <servo_set_servo>
+     1da:	43 c0       	rjmp	.+134    	; 0x262 <__vector_11+0x1e6>
+				}else
+					servo_push_back_order(PUSH,steps,command[4],command[5],orders_get_barrier_from_char(command[6]));
+     1dc:	0b ed       	ldi	r16, 0xDB	; 219
+     1de:	10 e0       	ldi	r17, 0x00	; 0
+     1e0:	f8 01       	movw	r30, r16
+     1e2:	86 81       	ldd	r24, Z+6	; 0x06
+     1e4:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     1e8:	f8 01       	movw	r30, r16
+     1ea:	25 81       	ldd	r18, Z+5	; 0x05
+     1ec:	44 81       	ldd	r20, Z+4	; 0x04
+     1ee:	08 2f       	mov	r16, r24
+     1f0:	be 01       	movw	r22, r28
+     1f2:	80 e0       	ldi	r24, 0x00	; 0
+     1f4:	0e 94 73 05 	call	0xae6	; 0xae6 <servo_push_back_order>
+     1f8:	34 c0       	rjmp	.+104    	; 0x262 <__vector_11+0x1e6>
+			break;
+			case 'b':;
+				uint8_t requirement = steps & 0xFF;
+				orders_sensors_push_back_order(requirement,command[4],command[5],orders_get_barrier_from_char(command[6]));
+     1fa:	0b ed       	ldi	r16, 0xDB	; 219
+     1fc:	10 e0       	ldi	r17, 0x00	; 0
+     1fe:	f8 01       	movw	r30, r16
+     200:	86 81       	ldd	r24, Z+6	; 0x06
+     202:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     206:	f8 01       	movw	r30, r16
+     208:	45 81       	ldd	r20, Z+5	; 0x05
+     20a:	64 81       	ldd	r22, Z+4	; 0x04
+     20c:	28 2f       	mov	r18, r24
+     20e:	8c 2f       	mov	r24, r28
+     210:	0e 94 b3 03 	call	0x766	; 0x766 <orders_sensors_push_back_order>
+			break;
+     214:	26 c0       	rjmp	.+76     	; 0x262 <__vector_11+0x1e6>
+			break;
+		}
+
+	}
+	else 
+	if(command[7] == ';')
+     216:	80 91 e2 00 	lds	r24, 0x00E2	; 0x8000e2 <command+0x7>
+     21a:	8b 33       	cpi	r24, 0x3B	; 59
+     21c:	69 f4       	brne	.+26     	; 0x238 <__vector_11+0x1bc>
+	{
+		for(uint8_t i = 0; i < STEPPER_NUM_OF_MOTORS; i++) stepper_pop_front_order(i);
+     21e:	80 e0       	ldi	r24, 0x00	; 0
+     220:	0e 94 d4 06 	call	0xda8	; 0xda8 <stepper_pop_front_order>
+     224:	81 e0       	ldi	r24, 0x01	; 1
+     226:	0e 94 d4 06 	call	0xda8	; 0xda8 <stepper_pop_front_order>
+     22a:	82 e0       	ldi	r24, 0x02	; 2
+     22c:	0e 94 d4 06 	call	0xda8	; 0xda8 <stepper_pop_front_order>
+     230:	83 e0       	ldi	r24, 0x03	; 3
+     232:	0e 94 d4 06 	call	0xda8	; 0xda8 <stepper_pop_front_order>
+     236:	15 c0       	rjmp	.+42     	; 0x262 <__vector_11+0x1e6>
+	}else
+	if(command[7] == 'X')
+     238:	80 91 e2 00 	lds	r24, 0x00E2	; 0x8000e2 <command+0x7>
+     23c:	88 35       	cpi	r24, 0x58	; 88
+     23e:	39 f4       	brne	.+14     	; 0x24e <__vector_11+0x1d2>
+	{
+		TCCR0 &= ~(1<<CS00);
+     240:	83 b7       	in	r24, 0x33	; 51
+     242:	8e 7f       	andi	r24, 0xFE	; 254
+     244:	83 bf       	out	0x33, r24	; 51
+		TCCR1B&= ~( (1<<CS11)|(1<<CS10) );
+     246:	8e b5       	in	r24, 0x2e	; 46
+     248:	8c 7f       	andi	r24, 0xFC	; 252
+     24a:	8e bd       	out	0x2e, r24	; 46
+     24c:	0a c0       	rjmp	.+20     	; 0x262 <__vector_11+0x1e6>
+	}else
+	if(command[7] == 'Y')
+     24e:	80 91 e2 00 	lds	r24, 0x00E2	; 0x8000e2 <command+0x7>
+     252:	89 35       	cpi	r24, 0x59	; 89
+     254:	31 f4       	brne	.+12     	; 0x262 <__vector_11+0x1e6>
+	{
+		TCCR0 |= (1<<CS00);
+     256:	83 b7       	in	r24, 0x33	; 51
+     258:	81 60       	ori	r24, 0x01	; 1
+     25a:	83 bf       	out	0x33, r24	; 51
+		TCCR1B|= (1<<CS11)|(1<<CS10);
+     25c:	8e b5       	in	r24, 0x2e	; 46
+     25e:	83 60       	ori	r24, 0x03	; 3
+     260:	8e bd       	out	0x2e, r24	; 46
+	}
+		
+}
+     262:	ff 91       	pop	r31
+     264:	ef 91       	pop	r30
+     266:	df 91       	pop	r29
+     268:	cf 91       	pop	r28
+     26a:	bf 91       	pop	r27
+     26c:	af 91       	pop	r26
+     26e:	9f 91       	pop	r25
+     270:	8f 91       	pop	r24
+     272:	7f 91       	pop	r23
+     274:	6f 91       	pop	r22
+     276:	5f 91       	pop	r21
+     278:	4f 91       	pop	r20
+     27a:	3f 91       	pop	r19
+     27c:	2f 91       	pop	r18
+     27e:	1f 91       	pop	r17
+     280:	0f 91       	pop	r16
+     282:	ef 90       	pop	r14
+     284:	df 90       	pop	r13
+     286:	cf 90       	pop	r12
+     288:	0f 90       	pop	r0
+     28a:	0f be       	out	0x3f, r0	; 63
+     28c:	0f 90       	pop	r0
+     28e:	1f 90       	pop	r1
+     290:	18 95       	reti
+
+00000292 <main>:
+
+int main(void)
+{
+	PORTB = 0x00;
+     292:	18 ba       	out	0x18, r1	; 24
+	DDRB = 0xff;
+     294:	8f ef       	ldi	r24, 0xFF	; 255
+     296:	87 bb       	out	0x17, r24	; 23
+	
+	PORTA = 0x00;
+     298:	1b ba       	out	0x1b, r1	; 27
+	DDRA = 0xff;
+     29a:	8a bb       	out	0x1a, r24	; 26
+	
+	PORTC = 0x00;
+     29c:	15 ba       	out	0x15, r1	; 21
+	DDRC = 0xff;
+     29e:	84 bb       	out	0x14, r24	; 20
+	
+	PORTD = 0x00;
+     2a0:	12 ba       	out	0x12, r1	; 18
+	DDRD = 0x02;
+     2a2:	82 e0       	ldi	r24, 0x02	; 2
+     2a4:	81 bb       	out	0x11, r24	; 17
+	
+	UBRRH = 0; //data bits: 8 //baud:  9600 
+     2a6:	10 bc       	out	0x20, r1	; 32
+	UBRRL = 103; //stop bits:  1 //parity:  No
+     2a8:	87 e6       	ldi	r24, 0x67	; 103
+     2aa:	89 b9       	out	0x09, r24	; 9
+	UCSRC |= (1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0);  
+     2ac:	80 b5       	in	r24, 0x20	; 32
+     2ae:	86 68       	ori	r24, 0x86	; 134
+     2b0:	80 bd       	out	0x20, r24	; 32
+	UCSRB |= (1<<TXEN)|(1<<RXEN)|(1<<RXCIE)|(1<<TXCIE);
+     2b2:	8a b1       	in	r24, 0x0a	; 10
+     2b4:	88 6d       	ori	r24, 0xD8	; 216
+     2b6:	8a b9       	out	0x0a, r24	; 10
+	
+	
+	stepper_add_motor(TURN,&PORTB,LSB);
+     2b8:	41 e0       	ldi	r20, 0x01	; 1
+     2ba:	68 e3       	ldi	r22, 0x38	; 56
+     2bc:	70 e0       	ldi	r23, 0x00	; 0
+     2be:	80 e0       	ldi	r24, 0x00	; 0
+     2c0:	0e 94 74 06 	call	0xce8	; 0xce8 <stepper_add_motor>
+	stepper_add_motor(LEFTRIGHT,&PORTB,MSB);	
+     2c4:	40 e0       	ldi	r20, 0x00	; 0
+     2c6:	68 e3       	ldi	r22, 0x38	; 56
+     2c8:	70 e0       	ldi	r23, 0x00	; 0
+     2ca:	82 e0       	ldi	r24, 0x02	; 2
+     2cc:	0e 94 74 06 	call	0xce8	; 0xce8 <stepper_add_motor>
+	stepper_add_motor(MOVE,&PORTC,MSB);
+     2d0:	40 e0       	ldi	r20, 0x00	; 0
+     2d2:	65 e3       	ldi	r22, 0x35	; 53
+     2d4:	70 e0       	ldi	r23, 0x00	; 0
+     2d6:	83 e0       	ldi	r24, 0x03	; 3
+     2d8:	0e 94 74 06 	call	0xce8	; 0xce8 <stepper_add_motor>
+	stepper_add_motor(UPDOWN,&PORTC,LSB);
+     2dc:	41 e0       	ldi	r20, 0x01	; 1
+     2de:	65 e3       	ldi	r22, 0x35	; 53
+     2e0:	70 e0       	ldi	r23, 0x00	; 0
+     2e2:	81 e0       	ldi	r24, 0x01	; 1
+     2e4:	0e 94 74 06 	call	0xce8	; 0xce8 <stepper_add_motor>
+	stepper_set_speed(UPDOWN,200);
+     2e8:	68 ec       	ldi	r22, 0xC8	; 200
+     2ea:	81 e0       	ldi	r24, 0x01	; 1
+     2ec:	0e 94 85 06 	call	0xd0a	; 0xd0a <stepper_set_speed>
+	
+	stepper_fastest_and_init_motors();	
+     2f0:	0e 94 97 06 	call	0xd2e	; 0xd2e <stepper_fastest_and_init_motors>
+	stepper_init();
+     2f4:	0e 94 8e 06 	call	0xd1c	; 0xd1c <stepper_init>
+	
+	servo_add_servo(PUSH,&PORTD,PD5,0);
+     2f8:	20 e0       	ldi	r18, 0x00	; 0
+     2fa:	30 e0       	ldi	r19, 0x00	; 0
+     2fc:	45 e0       	ldi	r20, 0x05	; 5
+     2fe:	62 e3       	ldi	r22, 0x32	; 50
+     300:	70 e0       	ldi	r23, 0x00	; 0
+     302:	80 e0       	ldi	r24, 0x00	; 0
+     304:	0e 94 61 05 	call	0xac2	; 0xac2 <servo_add_servo>
+	servo_init();	
+     308:	0e 94 7f 04 	call	0x8fe	; 0x8fe <servo_init>
+	sensors_init();
+     30c:	0e 94 63 04 	call	0x8c6	; 0x8c6 <sensors_init>
+	
+	orders_sensors_push_back_order(0b01110010,0,3,orders_get_barrier_from_char('s'));
+     310:	83 e7       	ldi	r24, 0x73	; 115
+     312:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     316:	28 2f       	mov	r18, r24
+     318:	43 e0       	ldi	r20, 0x03	; 3
+     31a:	60 e0       	ldi	r22, 0x00	; 0
+     31c:	82 e7       	ldi	r24, 0x72	; 114
+     31e:	0e 94 b3 03 	call	0x766	; 0x766 <orders_sensors_push_back_order>
+	stepper_push_back_order(UPDOWN,2048,CLOCKWISE,3,1,orders_get_barrier_from_char('b'));
+     322:	82 e6       	ldi	r24, 0x62	; 98
+     324:	0e 94 40 04 	call	0x880	; 0x880 <orders_get_barrier_from_char>
+     328:	e8 2e       	mov	r14, r24
+     32a:	01 e0       	ldi	r16, 0x01	; 1
+     32c:	23 e0       	ldi	r18, 0x03	; 3
+     32e:	40 e0       	ldi	r20, 0x00	; 0
+     330:	60 e0       	ldi	r22, 0x00	; 0
+     332:	78 e0       	ldi	r23, 0x08	; 8
+     334:	81 e0       	ldi	r24, 0x01	; 1
+     336:	0e 94 b8 09 	call	0x1370	; 0x1370 <stepper_push_back_order>
+	
+	sei();
+     33a:	78 94       	sei
+	
+    while(1) {}
+     33c:	ff cf       	rjmp	.-2      	; 0x33c <main+0xaa>
+
+0000033e <orders_timer_vector_function>:
+	
+	if(temp == 0)
+	{
+		orders_sensors_orders[ orders_sensors_devices[index_arg].orders_head ].order >>= 1;
+		uint8_t requirement = orders_sensors_orders[ orders_sensors_devices[index_arg].orders_head ].order & 1;
+		if(requirement == orders_sensors_devices[index_arg].actual_value)
+     33e:	29 b3       	in	r18, 0x19	; 25
+     340:	30 91 22 02 	lds	r19, 0x0222	; 0x800222 <key_state>
+     344:	20 95       	com	r18
+     346:	23 27       	eor	r18, r19
+     348:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <ct0.1649>
+     34c:	82 23       	and	r24, r18
+     34e:	80 95       	com	r24
+     350:	80 93 61 00 	sts	0x0061, r24	; 0x800061 <ct0.1649>
+     354:	90 91 60 00 	lds	r25, 0x0060	; 0x800060 <_edata>
+     358:	92 23       	and	r25, r18
+     35a:	98 27       	eor	r25, r24
+     35c:	90 93 60 00 	sts	0x0060, r25	; 0x800060 <_edata>
+     360:	28 23       	and	r18, r24
+     362:	82 2f       	mov	r24, r18
+     364:	89 23       	and	r24, r25
+     366:	98 2f       	mov	r25, r24
+     368:	93 27       	eor	r25, r19
+     36a:	90 93 22 02 	sts	0x0222, r25	; 0x800222 <key_state>
+     36e:	20 91 e8 01 	lds	r18, 0x01E8	; 0x8001e8 <key_press>
+     372:	89 23       	and	r24, r25
+     374:	82 2b       	or	r24, r18
+     376:	80 93 e8 01 	sts	0x01E8, r24	; 0x8001e8 <key_press>
+     37a:	08 95       	ret
+
+0000037c <orders_refresh_devices_values>:
+     37c:	cf 92       	push	r12
+     37e:	df 92       	push	r13
+     380:	ef 92       	push	r14
+     382:	ff 92       	push	r15
+     384:	0f 93       	push	r16
+     386:	1f 93       	push	r17
+     388:	cf 93       	push	r28
+     38a:	df 93       	push	r29
+     38c:	1f 92       	push	r1
+     38e:	cd b7       	in	r28, 0x3d	; 61
+     390:	de b7       	in	r29, 0x3e	; 62
+     392:	19 82       	std	Y+1, r1	; 0x01
+     394:	80 e8       	ldi	r24, 0x80	; 128
+     396:	0e 94 74 04 	call	0x8e8	; 0x8e8 <get_key_press>
+     39a:	88 23       	and	r24, r24
+     39c:	11 f0       	breq	.+4      	; 0x3a2 <orders_refresh_devices_values+0x26>
+     39e:	81 e0       	ldi	r24, 0x01	; 1
+     3a0:	89 83       	std	Y+1, r24	; 0x01
+     3a2:	89 81       	ldd	r24, Y+1	; 0x01
+     3a4:	90 e0       	ldi	r25, 0x00	; 0
+     3a6:	e9 ee       	ldi	r30, 0xE9	; 233
+     3a8:	f1 e0       	ldi	r31, 0x01	; 1
+     3aa:	92 87       	std	Z+10, r25	; 0x0a
+     3ac:	81 87       	std	Z+9, r24	; 0x09
+     3ae:	80 91 e7 01 	lds	r24, 0x01E7	; 0x8001e7 <sensors_decision>
+     3b2:	80 fb       	bst	r24, 0
+     3b4:	cc 24       	eor	r12, r12
+     3b6:	c0 f8       	bld	r12, 0
+     3b8:	d1 2c       	mov	r13, r1
+     3ba:	d1 82       	std	Z+1, r13	; 0x01
+     3bc:	c0 82       	st	Z, r12
+     3be:	80 91 e7 01 	lds	r24, 0x01E7	; 0x8001e7 <sensors_decision>
+     3c2:	81 fb       	bst	r24, 1
+     3c4:	ee 24       	eor	r14, r14
+     3c6:	e0 f8       	bld	r14, 0
+     3c8:	f1 2c       	mov	r15, r1
+     3ca:	f4 82       	std	Z+4, r15	; 0x04
+     3cc:	e3 82       	std	Z+3, r14	; 0x03
+     3ce:	80 91 e7 01 	lds	r24, 0x01E7	; 0x8001e7 <sensors_decision>
+     3d2:	82 fb       	bst	r24, 2
+     3d4:	00 27       	eor	r16, r16
+     3d6:	00 f9       	bld	r16, 0
+     3d8:	10 e0       	ldi	r17, 0x00	; 0
+     3da:	17 83       	std	Z+7, r17	; 0x07
+     3dc:	06 83       	std	Z+6, r16	; 0x06
+     3de:	0f 90       	pop	r0
+     3e0:	df 91       	pop	r29
+     3e2:	cf 91       	pop	r28
+     3e4:	1f 91       	pop	r17
+     3e6:	0f 91       	pop	r16
+     3e8:	ff 90       	pop	r15
+     3ea:	ef 90       	pop	r14
+     3ec:	df 90       	pop	r13
+     3ee:	cf 90       	pop	r12
+     3f0:	08 95       	ret
+
+000003f2 <orders_get_barrier>:
+     3f2:	66 23       	and	r22, r22
+     3f4:	49 f1       	breq	.+82     	; 0x448 <__LOCK_REGION_LENGTH__+0x48>
+     3f6:	82 30       	cpi	r24, 0x02	; 2
+     3f8:	69 f4       	brne	.+26     	; 0x414 <__LOCK_REGION_LENGTH__+0x14>
+     3fa:	70 e0       	ldi	r23, 0x00	; 0
+     3fc:	fb 01       	movw	r30, r22
+     3fe:	ee 0f       	add	r30, r30
+     400:	ff 1f       	adc	r31, r31
+     402:	ee 0f       	add	r30, r30
+     404:	ff 1f       	adc	r31, r31
+     406:	6e 0f       	add	r22, r30
+     408:	7f 1f       	adc	r23, r31
+     40a:	fb 01       	movw	r30, r22
+     40c:	ee 59       	subi	r30, 0x9E	; 158
+     40e:	ff 4f       	sbci	r31, 0xFF	; 255
+     410:	84 81       	ldd	r24, Z+4	; 0x04
+     412:	08 95       	ret
+     414:	81 11       	cpse	r24, r1
+     416:	09 c0       	rjmp	.+18     	; 0x42a <__LOCK_REGION_LENGTH__+0x2a>
+     418:	87 e0       	ldi	r24, 0x07	; 7
+     41a:	68 9f       	mul	r22, r24
+     41c:	f0 01       	movw	r30, r0
+     41e:	11 24       	eor	r1, r1
+     420:	e1 5c       	subi	r30, 0xC1	; 193
+     422:	fe 4f       	sbci	r31, 0xFE	; 254
+     424:	82 81       	ldd	r24, Z+2	; 0x02
+     426:	93 81       	ldd	r25, Z+3	; 0x03
+     428:	08 95       	ret
+     42a:	81 30       	cpi	r24, 0x01	; 1
+     42c:	79 f4       	brne	.+30     	; 0x44c <__LOCK_REGION_LENGTH__+0x4c>
+     42e:	70 e0       	ldi	r23, 0x00	; 0
+     430:	fb 01       	movw	r30, r22
+     432:	ee 0f       	add	r30, r30
+     434:	ff 1f       	adc	r31, r31
+     436:	e6 0f       	add	r30, r22
+     438:	f7 1f       	adc	r31, r23
+     43a:	ee 0f       	add	r30, r30
+     43c:	ff 1f       	adc	r31, r31
+     43e:	e5 51       	subi	r30, 0x15	; 21
+     440:	ff 4f       	sbci	r31, 0xFF	; 255
+     442:	81 81       	ldd	r24, Z+1	; 0x01
+     444:	92 81       	ldd	r25, Z+2	; 0x02
+     446:	08 95       	ret
+     448:	80 e0       	ldi	r24, 0x00	; 0
+     44a:	08 95       	ret
+     44c:	80 e0       	ldi	r24, 0x00	; 0
+     44e:	08 95       	ret
+
+00000450 <orders_get_barrier_index>:
+     450:	66 23       	and	r22, r22
+     452:	09 f4       	brne	.+2      	; 0x456 <orders_get_barrier_index+0x6>
+     454:	5f c0       	rjmp	.+190    	; 0x514 <__stack+0xb5>
+     456:	82 30       	cpi	r24, 0x02	; 2
+     458:	e9 f4       	brne	.+58     	; 0x494 <__stack+0x35>
+     45a:	80 91 67 00 	lds	r24, 0x0067	; 0x800067 <orders_sensors_orders+0x5>
+     45e:	86 17       	cp	r24, r22
+     460:	81 f0       	breq	.+32     	; 0x482 <__stack+0x23>
+     462:	22 e0       	ldi	r18, 0x02	; 2
+     464:	30 e0       	ldi	r19, 0x00	; 0
+     466:	82 2f       	mov	r24, r18
+     468:	f9 01       	movw	r30, r18
+     46a:	ee 0f       	add	r30, r30
+     46c:	ff 1f       	adc	r31, r31
+     46e:	ee 0f       	add	r30, r30
+     470:	ff 1f       	adc	r31, r31
+     472:	e2 0f       	add	r30, r18
+     474:	f3 1f       	adc	r31, r19
+     476:	ee 59       	subi	r30, 0x9E	; 158
+     478:	ff 4f       	sbci	r31, 0xFF	; 255
+     47a:	90 81       	ld	r25, Z
+     47c:	96 13       	cpse	r25, r22
+     47e:	03 c0       	rjmp	.+6      	; 0x486 <__stack+0x27>
+     480:	08 95       	ret
+     482:	81 e0       	ldi	r24, 0x01	; 1
+     484:	08 95       	ret
+     486:	2f 5f       	subi	r18, 0xFF	; 255
+     488:	3f 4f       	sbci	r19, 0xFF	; 255
+     48a:	28 31       	cpi	r18, 0x18	; 24
+     48c:	31 05       	cpc	r19, r1
+     48e:	59 f7       	brne	.-42     	; 0x466 <__stack+0x7>
+     490:	86 2f       	mov	r24, r22
+     492:	08 95       	ret
+     494:	81 11       	cpse	r24, r1
+     496:	1f c0       	rjmp	.+62     	; 0x4d6 <__stack+0x77>
+     498:	80 91 46 01 	lds	r24, 0x0146	; 0x800146 <stepper_motors_orders+0x7>
+     49c:	86 17       	cp	r24, r22
+     49e:	91 f0       	breq	.+36     	; 0x4c4 <__stack+0x65>
+     4a0:	22 e0       	ldi	r18, 0x02	; 2
+     4a2:	30 e0       	ldi	r19, 0x00	; 0
+     4a4:	82 2f       	mov	r24, r18
+     4a6:	f9 01       	movw	r30, r18
+     4a8:	ee 0f       	add	r30, r30
+     4aa:	ff 1f       	adc	r31, r31
+     4ac:	ee 0f       	add	r30, r30
+     4ae:	ff 1f       	adc	r31, r31
+     4b0:	ee 0f       	add	r30, r30
+     4b2:	ff 1f       	adc	r31, r31
+     4b4:	e2 1b       	sub	r30, r18
+     4b6:	f3 0b       	sbc	r31, r19
+     4b8:	e1 5c       	subi	r30, 0xC1	; 193
+     4ba:	fe 4f       	sbci	r31, 0xFE	; 254
+     4bc:	90 81       	ld	r25, Z
+     4be:	96 13       	cpse	r25, r22
+     4c0:	03 c0       	rjmp	.+6      	; 0x4c8 <__stack+0x69>
+     4c2:	08 95       	ret
+     4c4:	81 e0       	ldi	r24, 0x01	; 1
+     4c6:	08 95       	ret
+     4c8:	2f 5f       	subi	r18, 0xFF	; 255
+     4ca:	3f 4f       	sbci	r19, 0xFF	; 255
+     4cc:	28 31       	cpi	r18, 0x18	; 24
+     4ce:	31 05       	cpc	r19, r1
+     4d0:	49 f7       	brne	.-46     	; 0x4a4 <__stack+0x45>
+     4d2:	86 2f       	mov	r24, r22
+     4d4:	08 95       	ret
+     4d6:	81 30       	cpi	r24, 0x01	; 1
+     4d8:	f9 f4       	brne	.+62     	; 0x518 <__stack+0xb9>
+     4da:	80 91 f1 00 	lds	r24, 0x00F1	; 0x8000f1 <servo_orders_table+0x6>
+     4de:	86 17       	cp	r24, r22
+     4e0:	81 f0       	breq	.+32     	; 0x502 <__stack+0xa3>
+     4e2:	22 e0       	ldi	r18, 0x02	; 2
+     4e4:	30 e0       	ldi	r19, 0x00	; 0
+     4e6:	82 2f       	mov	r24, r18
+     4e8:	f9 01       	movw	r30, r18
+     4ea:	ee 0f       	add	r30, r30
+     4ec:	ff 1f       	adc	r31, r31
+     4ee:	e2 0f       	add	r30, r18
+     4f0:	f3 1f       	adc	r31, r19
+     4f2:	ee 0f       	add	r30, r30
+     4f4:	ff 1f       	adc	r31, r31
+     4f6:	e5 51       	subi	r30, 0x15	; 21
+     4f8:	ff 4f       	sbci	r31, 0xFF	; 255
+     4fa:	90 81       	ld	r25, Z
+     4fc:	96 13       	cpse	r25, r22
+     4fe:	03 c0       	rjmp	.+6      	; 0x506 <__stack+0xa7>
+     500:	08 95       	ret
+     502:	81 e0       	ldi	r24, 0x01	; 1
+     504:	08 95       	ret
+     506:	2f 5f       	subi	r18, 0xFF	; 255
+     508:	3f 4f       	sbci	r19, 0xFF	; 255
+     50a:	2d 30       	cpi	r18, 0x0D	; 13
+     50c:	31 05       	cpc	r19, r1
+     50e:	59 f7       	brne	.-42     	; 0x4e6 <__stack+0x87>
+     510:	86 2f       	mov	r24, r22
+     512:	08 95       	ret
+     514:	80 e0       	ldi	r24, 0x00	; 0
+     516:	08 95       	ret
+     518:	86 2f       	mov	r24, r22
+     51a:	08 95       	ret
+
+0000051c <orders_sensors_pop_front_order>:
+		}
+	}
+}
+void orders_sensors_pop_front_order()
+{
+	if(orders_sensors_orders_head != 0)
+     51c:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     520:	88 23       	and	r24, r24
+     522:	09 f4       	brne	.+2      	; 0x526 <orders_sensors_pop_front_order+0xa>
+     524:	56 c0       	rjmp	.+172    	; 0x5d2 <orders_sensors_pop_front_order+0xb6>
+	{
+		uint8_t temp = orders_sensors_orders[orders_sensors_orders_head].super.next;
+     526:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     52a:	90 e0       	ldi	r25, 0x00	; 0
+     52c:	fc 01       	movw	r30, r24
+     52e:	ee 0f       	add	r30, r30
+     530:	ff 1f       	adc	r31, r31
+     532:	ee 0f       	add	r30, r30
+     534:	ff 1f       	adc	r31, r31
+     536:	8e 0f       	add	r24, r30
+     538:	9f 1f       	adc	r25, r31
+     53a:	fc 01       	movw	r30, r24
+     53c:	ee 59       	subi	r30, 0x9E	; 158
+     53e:	ff 4f       	sbci	r31, 0xFF	; 255
+     540:	23 81       	ldd	r18, Z+3	; 0x03
+		
+		orders_sensors_orders[orders_sensors_orders_head].order = 0;
+     542:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     546:	90 e0       	ldi	r25, 0x00	; 0
+     548:	fc 01       	movw	r30, r24
+     54a:	ee 0f       	add	r30, r30
+     54c:	ff 1f       	adc	r31, r31
+     54e:	ee 0f       	add	r30, r30
+     550:	ff 1f       	adc	r31, r31
+     552:	8e 0f       	add	r24, r30
+     554:	9f 1f       	adc	r25, r31
+     556:	fc 01       	movw	r30, r24
+     558:	ee 59       	subi	r30, 0x9E	; 158
+     55a:	ff 4f       	sbci	r31, 0xFF	; 255
+     55c:	14 82       	std	Z+4, r1	; 0x04
+		orders_sensors_orders[orders_sensors_orders_head].super.index = 0;
+     55e:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     562:	90 e0       	ldi	r25, 0x00	; 0
+     564:	fc 01       	movw	r30, r24
+     566:	ee 0f       	add	r30, r30
+     568:	ff 1f       	adc	r31, r31
+     56a:	ee 0f       	add	r30, r30
+     56c:	ff 1f       	adc	r31, r31
+     56e:	8e 0f       	add	r24, r30
+     570:	9f 1f       	adc	r25, r31
+     572:	fc 01       	movw	r30, r24
+     574:	ee 59       	subi	r30, 0x9E	; 158
+     576:	ff 4f       	sbci	r31, 0xFF	; 255
+     578:	10 82       	st	Z, r1
+		orders_sensors_orders[orders_sensors_orders_head].super.next = 0;
+     57a:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     57e:	90 e0       	ldi	r25, 0x00	; 0
+     580:	fc 01       	movw	r30, r24
+     582:	ee 0f       	add	r30, r30
+     584:	ff 1f       	adc	r31, r31
+     586:	ee 0f       	add	r30, r30
+     588:	ff 1f       	adc	r31, r31
+     58a:	8e 0f       	add	r24, r30
+     58c:	9f 1f       	adc	r25, r31
+     58e:	fc 01       	movw	r30, r24
+     590:	ee 59       	subi	r30, 0x9E	; 158
+     592:	ff 4f       	sbci	r31, 0xFF	; 255
+     594:	13 82       	std	Z+3, r1	; 0x03
+		orders_sensors_orders[orders_sensors_orders_head].super.barrier.value = 0;
+     596:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     59a:	90 e0       	ldi	r25, 0x00	; 0
+     59c:	fc 01       	movw	r30, r24
+     59e:	ee 0f       	add	r30, r30
+     5a0:	ff 1f       	adc	r31, r31
+     5a2:	ee 0f       	add	r30, r30
+     5a4:	ff 1f       	adc	r31, r31
+     5a6:	8e 0f       	add	r24, r30
+     5a8:	9f 1f       	adc	r25, r31
+     5aa:	fc 01       	movw	r30, r24
+     5ac:	ee 59       	subi	r30, 0x9E	; 158
+     5ae:	ff 4f       	sbci	r31, 0xFF	; 255
+     5b0:	12 82       	std	Z+2, r1	; 0x02
+		orders_sensors_orders[orders_sensors_orders_head].super.barrier.device = 0;
+     5b2:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     5b6:	90 e0       	ldi	r25, 0x00	; 0
+     5b8:	fc 01       	movw	r30, r24
+     5ba:	ee 0f       	add	r30, r30
+     5bc:	ff 1f       	adc	r31, r31
+     5be:	ee 0f       	add	r30, r30
+     5c0:	ff 1f       	adc	r31, r31
+     5c2:	8e 0f       	add	r24, r30
+     5c4:	9f 1f       	adc	r25, r31
+     5c6:	fc 01       	movw	r30, r24
+     5c8:	ee 59       	subi	r30, 0x9E	; 158
+     5ca:	ff 4f       	sbci	r31, 0xFF	; 255
+     5cc:	11 82       	std	Z+1, r1	; 0x01
+		
+		orders_sensors_orders_head = temp;
+     5ce:	20 93 da 00 	sts	0x00DA, r18	; 0x8000da <orders_sensors_orders_head>
+     5d2:	08 95       	ret
+
+000005d4 <orders_process_sensors>:
+	}
+}
+void orders_process_sensors()
+{
+     5d4:	af 92       	push	r10
+     5d6:	bf 92       	push	r11
+     5d8:	cf 92       	push	r12
+     5da:	df 92       	push	r13
+     5dc:	ef 92       	push	r14
+     5de:	ff 92       	push	r15
+     5e0:	0f 93       	push	r16
+     5e2:	1f 93       	push	r17
+     5e4:	cf 93       	push	r28
+     5e6:	df 93       	push	r29
+     5e8:	00 d0       	rcall	.+0      	; 0x5ea <orders_process_sensors+0x16>
+     5ea:	00 d0       	rcall	.+0      	; 0x5ec <orders_process_sensors+0x18>
+     5ec:	cd b7       	in	r28, 0x3d	; 61
+     5ee:	de b7       	in	r29, 0x3e	; 62
+	volatile uint8_t temp = orders_sensors_orders[ orders_sensors_orders_head ].super.barrier.value;
+     5f0:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     5f4:	90 e0       	ldi	r25, 0x00	; 0
+     5f6:	fc 01       	movw	r30, r24
+     5f8:	ee 0f       	add	r30, r30
+     5fa:	ff 1f       	adc	r31, r31
+     5fc:	ee 0f       	add	r30, r30
+     5fe:	ff 1f       	adc	r31, r31
+     600:	8e 0f       	add	r24, r30
+     602:	9f 1f       	adc	r25, r31
+     604:	fc 01       	movw	r30, r24
+     606:	ee 59       	subi	r30, 0x9E	; 158
+     608:	ff 4f       	sbci	r31, 0xFF	; 255
+     60a:	82 81       	ldd	r24, Z+2	; 0x02
+     60c:	89 83       	std	Y+1, r24	; 0x01
+	if (temp != 0)
+     60e:	89 81       	ldd	r24, Y+1	; 0x01
+     610:	88 23       	and	r24, r24
+     612:	91 f0       	breq	.+36     	; 0x638 <orders_process_sensors+0x64>
+	{
+		temp = orders_get_barrier(orders_sensors_orders[ orders_sensors_orders_head ].super.barrier.device, temp); //if barrier exists go for value in there
+     614:	69 81       	ldd	r22, Y+1	; 0x01
+     616:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     61a:	90 e0       	ldi	r25, 0x00	; 0
+     61c:	fc 01       	movw	r30, r24
+     61e:	ee 0f       	add	r30, r30
+     620:	ff 1f       	adc	r31, r31
+     622:	ee 0f       	add	r30, r30
+     624:	ff 1f       	adc	r31, r31
+     626:	8e 0f       	add	r24, r30
+     628:	9f 1f       	adc	r25, r31
+     62a:	fc 01       	movw	r30, r24
+     62c:	ee 59       	subi	r30, 0x9E	; 158
+     62e:	ff 4f       	sbci	r31, 0xFF	; 255
+     630:	81 81       	ldd	r24, Z+1	; 0x01
+     632:	0e 94 f9 01 	call	0x3f2	; 0x3f2 <orders_get_barrier>
+     636:	89 83       	std	Y+1, r24	; 0x01
+	}
+	
+	if(temp == 0)
+     638:	89 81       	ldd	r24, Y+1	; 0x01
+     63a:	81 11       	cpse	r24, r1
+     63c:	5d c0       	rjmp	.+186    	; 0x6f8 <orders_process_sensors+0x124>
+	{
+		volatile uint8_t requirement = orders_sensors_orders[ orders_sensors_orders_head ].order;
+     63e:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     642:	90 e0       	ldi	r25, 0x00	; 0
+     644:	fc 01       	movw	r30, r24
+     646:	ee 0f       	add	r30, r30
+     648:	ff 1f       	adc	r31, r31
+     64a:	ee 0f       	add	r30, r30
+     64c:	ff 1f       	adc	r31, r31
+     64e:	8e 0f       	add	r24, r30
+     650:	9f 1f       	adc	r25, r31
+     652:	fc 01       	movw	r30, r24
+     654:	ee 59       	subi	r30, 0x9E	; 158
+     656:	ff 4f       	sbci	r31, 0xFF	; 255
+     658:	84 81       	ldd	r24, Z+4	; 0x04
+     65a:	8c 83       	std	Y+4, r24	; 0x04
+		volatile uint8_t resp = (requirement >> 4) & 0xF;
+     65c:	8c 81       	ldd	r24, Y+4	; 0x04
+     65e:	82 95       	swap	r24
+     660:	8f 70       	andi	r24, 0x0F	; 15
+     662:	8b 83       	std	Y+3, r24	; 0x03
+		requirement &= 0xF;
+     664:	8c 81       	ldd	r24, Y+4	; 0x04
+     666:	8f 70       	andi	r24, 0x0F	; 15
+     668:	8c 83       	std	Y+4, r24	; 0x04
+		
+		volatile uint8_t fulfil = 1; 
+     66a:	81 e0       	ldi	r24, 0x01	; 1
+     66c:	8a 83       	std	Y+2, r24	; 0x02
+		if( (resp & 0b0001) == 0b0001)
+     66e:	8b 81       	ldd	r24, Y+3	; 0x03
+     670:	80 ff       	sbrs	r24, 0
+     672:	0d c0       	rjmp	.+26     	; 0x68e <orders_process_sensors+0xba>
+		{
+			if( (requirement & 0b0001) != orders_sensors_devices[GRAYSCALE_LEFT].actual_value) fulfil = 0;
+     674:	2c 81       	ldd	r18, Y+4	; 0x04
+     676:	80 91 e9 01 	lds	r24, 0x01E9	; 0x8001e9 <orders_sensors_devices>
+     67a:	90 91 ea 01 	lds	r25, 0x01EA	; 0x8001ea <orders_sensors_devices+0x1>
+     67e:	20 fb       	bst	r18, 0
+     680:	aa 24       	eor	r10, r10
+     682:	a0 f8       	bld	r10, 0
+     684:	b1 2c       	mov	r11, r1
+     686:	a8 16       	cp	r10, r24
+     688:	b9 06       	cpc	r11, r25
+     68a:	09 f0       	breq	.+2      	; 0x68e <orders_process_sensors+0xba>
+     68c:	1a 82       	std	Y+2, r1	; 0x02
+		}
+		
+		if( (resp & 0b0010) == 0b0010)
+     68e:	8b 81       	ldd	r24, Y+3	; 0x03
+     690:	81 ff       	sbrs	r24, 1
+     692:	0d c0       	rjmp	.+26     	; 0x6ae <orders_process_sensors+0xda>
+		{
+			if( ((requirement & 0b0010)>>1) != orders_sensors_devices[GRAYSCALE_CENTER].actual_value) fulfil = 0;
+     694:	2c 81       	ldd	r18, Y+4	; 0x04
+     696:	80 91 ec 01 	lds	r24, 0x01EC	; 0x8001ec <orders_sensors_devices+0x3>
+     69a:	90 91 ed 01 	lds	r25, 0x01ED	; 0x8001ed <orders_sensors_devices+0x4>
+     69e:	21 fb       	bst	r18, 1
+     6a0:	cc 24       	eor	r12, r12
+     6a2:	c0 f8       	bld	r12, 0
+     6a4:	d1 2c       	mov	r13, r1
+     6a6:	c8 16       	cp	r12, r24
+     6a8:	d9 06       	cpc	r13, r25
+     6aa:	09 f0       	breq	.+2      	; 0x6ae <orders_process_sensors+0xda>
+     6ac:	1a 82       	std	Y+2, r1	; 0x02
+		}
+		
+		if( (resp & 0b0100) == 0b0100)
+     6ae:	8b 81       	ldd	r24, Y+3	; 0x03
+     6b0:	82 ff       	sbrs	r24, 2
+     6b2:	0d c0       	rjmp	.+26     	; 0x6ce <orders_process_sensors+0xfa>
+		{
+			if( ((requirement & 0b0100)>>2) != orders_sensors_devices[GRAYSCALE_RIGHT].actual_value) fulfil = 0;
+     6b4:	2c 81       	ldd	r18, Y+4	; 0x04
+     6b6:	80 91 ef 01 	lds	r24, 0x01EF	; 0x8001ef <orders_sensors_devices+0x6>
+     6ba:	90 91 f0 01 	lds	r25, 0x01F0	; 0x8001f0 <orders_sensors_devices+0x7>
+     6be:	22 fb       	bst	r18, 2
+     6c0:	ee 24       	eor	r14, r14
+     6c2:	e0 f8       	bld	r14, 0
+     6c4:	f1 2c       	mov	r15, r1
+     6c6:	e8 16       	cp	r14, r24
+     6c8:	f9 06       	cpc	r15, r25
+     6ca:	09 f0       	breq	.+2      	; 0x6ce <orders_process_sensors+0xfa>
+     6cc:	1a 82       	std	Y+2, r1	; 0x02
+		}
+		
+		if( (resp & 0b1000) == 0b1000)
+     6ce:	8b 81       	ldd	r24, Y+3	; 0x03
+     6d0:	83 ff       	sbrs	r24, 3
+     6d2:	0d c0       	rjmp	.+26     	; 0x6ee <orders_process_sensors+0x11a>
+		{
+			if( ((requirement & 0b1000)>>3) != orders_sensors_devices[FRONT_SWITCH].actual_value) fulfil = 0;
+     6d4:	2c 81       	ldd	r18, Y+4	; 0x04
+     6d6:	80 91 f2 01 	lds	r24, 0x01F2	; 0x8001f2 <orders_sensors_devices+0x9>
+     6da:	90 91 f3 01 	lds	r25, 0x01F3	; 0x8001f3 <orders_sensors_devices+0xa>
+     6de:	23 fb       	bst	r18, 3
+     6e0:	00 27       	eor	r16, r16
+     6e2:	00 f9       	bld	r16, 0
+     6e4:	10 e0       	ldi	r17, 0x00	; 0
+     6e6:	08 17       	cp	r16, r24
+     6e8:	19 07       	cpc	r17, r25
+     6ea:	09 f0       	breq	.+2      	; 0x6ee <orders_process_sensors+0x11a>
+     6ec:	1a 82       	std	Y+2, r1	; 0x02
+		}
+		if(fulfil == 1)
+     6ee:	8a 81       	ldd	r24, Y+2	; 0x02
+     6f0:	81 30       	cpi	r24, 0x01	; 1
+     6f2:	11 f4       	brne	.+4      	; 0x6f8 <orders_process_sensors+0x124>
+		{
+			orders_sensors_pop_front_order();
+     6f4:	0e 94 8e 02 	call	0x51c	; 0x51c <orders_sensors_pop_front_order>
+		}
+	}
+	
+}
+     6f8:	0f 90       	pop	r0
+     6fa:	0f 90       	pop	r0
+     6fc:	0f 90       	pop	r0
+     6fe:	0f 90       	pop	r0
+     700:	df 91       	pop	r29
+     702:	cf 91       	pop	r28
+     704:	1f 91       	pop	r17
+     706:	0f 91       	pop	r16
+     708:	ff 90       	pop	r15
+     70a:	ef 90       	pop	r14
+     70c:	df 90       	pop	r13
+     70e:	cf 90       	pop	r12
+     710:	bf 90       	pop	r11
+     712:	af 90       	pop	r10
+     714:	08 95       	ret
+
+00000716 <__vector_7>:
+ */ 
+
+#include "orders.h"
+
+ISR(TIMER1_COMPB_vect)
+{
+     716:	1f 92       	push	r1
+     718:	0f 92       	push	r0
+     71a:	0f b6       	in	r0, 0x3f	; 63
+     71c:	0f 92       	push	r0
+     71e:	11 24       	eor	r1, r1
+     720:	2f 93       	push	r18
+     722:	3f 93       	push	r19
+     724:	4f 93       	push	r20
+     726:	5f 93       	push	r21
+     728:	6f 93       	push	r22
+     72a:	7f 93       	push	r23
+     72c:	8f 93       	push	r24
+     72e:	9f 93       	push	r25
+     730:	af 93       	push	r26
+     732:	bf 93       	push	r27
+     734:	ef 93       	push	r30
+     736:	ff 93       	push	r31
+	orders_refresh_devices_values();
+     738:	0e 94 be 01 	call	0x37c	; 0x37c <orders_refresh_devices_values>
+	orders_timer_vector_function();
+     73c:	0e 94 9f 01 	call	0x33e	; 0x33e <orders_timer_vector_function>
+	orders_process_sensors();
+     740:	0e 94 ea 02 	call	0x5d4	; 0x5d4 <orders_process_sensors>
+}
+     744:	ff 91       	pop	r31
+     746:	ef 91       	pop	r30
+     748:	bf 91       	pop	r27
+     74a:	af 91       	pop	r26
+     74c:	9f 91       	pop	r25
+     74e:	8f 91       	pop	r24
+     750:	7f 91       	pop	r23
+     752:	6f 91       	pop	r22
+     754:	5f 91       	pop	r21
+     756:	4f 91       	pop	r20
+     758:	3f 91       	pop	r19
+     75a:	2f 91       	pop	r18
+     75c:	0f 90       	pop	r0
+     75e:	0f be       	out	0x3f, r0	; 63
+     760:	0f 90       	pop	r0
+     762:	1f 90       	pop	r1
+     764:	18 95       	reti
+
+00000766 <orders_sensors_push_back_order>:
+	}
+	
+}
+uint8_t orders_sensors_push_back_order( uint8_t order_arg, uint8_t customer_barrier_arg, 
+										uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_device_arg)
+{
+     766:	ef 92       	push	r14
+     768:	ff 92       	push	r15
+     76a:	1f 93       	push	r17
+     76c:	cf 93       	push	r28
+     76e:	df 93       	push	r29
+     770:	1f 92       	push	r1
+     772:	cd b7       	in	r28, 0x3d	; 61
+     774:	de b7       	in	r29, 0x3e	; 62
+	uint8_t i;
+	for(i = 1;i<ORDERS_TOTAL_SENSORS_ORDERS_NUMBER; i++)
+	{
+		if(orders_sensors_orders[i].order == 0)
+     776:	90 91 6b 00 	lds	r25, 0x006B	; 0x80006b <orders_sensors_orders+0x9>
+     77a:	99 23       	and	r25, r25
+     77c:	c9 f0       	breq	.+50     	; 0x7b0 <orders_sensors_push_back_order+0x4a>
+     77e:	e2 e0       	ldi	r30, 0x02	; 2
+     780:	f0 e0       	ldi	r31, 0x00	; 0
+     782:	1e 2f       	mov	r17, r30
+     784:	df 01       	movw	r26, r30
+     786:	aa 0f       	add	r26, r26
+     788:	bb 1f       	adc	r27, r27
+     78a:	aa 0f       	add	r26, r26
+     78c:	bb 1f       	adc	r27, r27
+     78e:	ae 0f       	add	r26, r30
+     790:	bf 1f       	adc	r27, r31
+     792:	ae 59       	subi	r26, 0x9E	; 158
+     794:	bf 4f       	sbci	r27, 0xFF	; 255
+     796:	14 96       	adiw	r26, 0x04	; 4
+     798:	9c 91       	ld	r25, X
+     79a:	99 23       	and	r25, r25
+     79c:	31 f0       	breq	.+12     	; 0x7aa <orders_sensors_push_back_order+0x44>
+     79e:	11 e0       	ldi	r17, 0x01	; 1
+     7a0:	1e 0f       	add	r17, r30
+     7a2:	31 96       	adiw	r30, 0x01	; 1
+}
+uint8_t orders_sensors_push_back_order( uint8_t order_arg, uint8_t customer_barrier_arg, 
+										uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_device_arg)
+{
+	uint8_t i;
+	for(i = 1;i<ORDERS_TOTAL_SENSORS_ORDERS_NUMBER; i++)
+     7a4:	e8 31       	cpi	r30, 0x18	; 24
+     7a6:	f1 05       	cpc	r31, r1
+     7a8:	61 f7       	brne	.-40     	; 0x782 <orders_sensors_push_back_order+0x1c>
+	{
+		if(orders_sensors_orders[i].order == 0)
+		break;
+	}
+	if(i == ORDERS_TOTAL_SENSORS_ORDERS_NUMBER) // TABLE IS FULFILLED
+     7aa:	18 31       	cpi	r17, 0x18	; 24
+     7ac:	11 f4       	brne	.+4      	; 0x7b2 <orders_sensors_push_back_order+0x4c>
+     7ae:	60 c0       	rjmp	.+192    	; 0x870 <orders_sensors_push_back_order+0x10a>
+}
+uint8_t orders_sensors_push_back_order( uint8_t order_arg, uint8_t customer_barrier_arg, 
+										uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_device_arg)
+{
+	uint8_t i;
+	for(i = 1;i<ORDERS_TOTAL_SENSORS_ORDERS_NUMBER; i++)
+     7b0:	11 e0       	ldi	r17, 0x01	; 1
+		break;
+	}
+	if(i == ORDERS_TOTAL_SENSORS_ORDERS_NUMBER) // TABLE IS FULFILLED
+	return 1;
+	
+	orders_sensors_orders[i].order = order_arg;
+     7b2:	e1 2f       	mov	r30, r17
+     7b4:	f0 e0       	ldi	r31, 0x00	; 0
+     7b6:	7f 01       	movw	r14, r30
+     7b8:	ee 0c       	add	r14, r14
+     7ba:	ff 1c       	adc	r15, r15
+     7bc:	ee 0c       	add	r14, r14
+     7be:	ff 1c       	adc	r15, r15
+     7c0:	ee 0d       	add	r30, r14
+     7c2:	ff 1d       	adc	r31, r15
+     7c4:	df 01       	movw	r26, r30
+     7c6:	ae 59       	subi	r26, 0x9E	; 158
+     7c8:	bf 4f       	sbci	r27, 0xFF	; 255
+     7ca:	7d 01       	movw	r14, r26
+     7cc:	14 96       	adiw	r26, 0x04	; 4
+     7ce:	8c 93       	st	X, r24
+     7d0:	14 97       	sbiw	r26, 0x04	; 4
+	orders_sensors_orders[i].super.index = customer_index_arg;
+     7d2:	4c 93       	st	X, r20
+	orders_sensors_orders[i].super.next = 0;
+     7d4:	13 96       	adiw	r26, 0x03	; 3
+     7d6:	1c 92       	st	X, r1
+     7d8:	13 97       	sbiw	r26, 0x03	; 3
+	orders_sensors_orders[i].super.barrier.device = barrier_device_arg;
+     7da:	11 96       	adiw	r26, 0x01	; 1
+     7dc:	2c 93       	st	X, r18
+	orders_sensors_orders[i].super.barrier.value = orders_get_barrier_index( barrier_device_arg, customer_barrier_arg);
+     7de:	82 2f       	mov	r24, r18
+     7e0:	0e 94 28 02 	call	0x450	; 0x450 <orders_get_barrier_index>
+     7e4:	f7 01       	movw	r30, r14
+     7e6:	82 83       	std	Z+2, r24	; 0x02
+	
+	/* ORDERS LIST PERSPECTIVE ABOVE, ORDERS HEAD PERSPECTIVE BELOW */
+	
+	volatile uint8_t temp = orders_sensors_orders_head;
+     7e8:	80 91 da 00 	lds	r24, 0x00DA	; 0x8000da <orders_sensors_orders_head>
+     7ec:	89 83       	std	Y+1, r24	; 0x01
+	if(temp != 0) //NOT EMPTY ORDERS LIST
+     7ee:	89 81       	ldd	r24, Y+1	; 0x01
+     7f0:	88 23       	and	r24, r24
+     7f2:	d9 f1       	breq	.+118    	; 0x86a <orders_sensors_push_back_order+0x104>
+	{
+		while(orders_sensors_orders[temp].super.next != 0) temp = orders_sensors_orders[temp].super.next;
+     7f4:	89 81       	ldd	r24, Y+1	; 0x01
+     7f6:	90 e0       	ldi	r25, 0x00	; 0
+     7f8:	fc 01       	movw	r30, r24
+     7fa:	ee 0f       	add	r30, r30
+     7fc:	ff 1f       	adc	r31, r31
+     7fe:	ee 0f       	add	r30, r30
+     800:	ff 1f       	adc	r31, r31
+     802:	8e 0f       	add	r24, r30
+     804:	9f 1f       	adc	r25, r31
+     806:	fc 01       	movw	r30, r24
+     808:	ee 59       	subi	r30, 0x9E	; 158
+     80a:	ff 4f       	sbci	r31, 0xFF	; 255
+     80c:	83 81       	ldd	r24, Z+3	; 0x03
+     80e:	88 23       	and	r24, r24
+     810:	e9 f0       	breq	.+58     	; 0x84c <orders_sensors_push_back_order+0xe6>
+     812:	89 81       	ldd	r24, Y+1	; 0x01
+     814:	90 e0       	ldi	r25, 0x00	; 0
+     816:	fc 01       	movw	r30, r24
+     818:	ee 0f       	add	r30, r30
+     81a:	ff 1f       	adc	r31, r31
+     81c:	ee 0f       	add	r30, r30
+     81e:	ff 1f       	adc	r31, r31
+     820:	8e 0f       	add	r24, r30
+     822:	9f 1f       	adc	r25, r31
+     824:	fc 01       	movw	r30, r24
+     826:	ee 59       	subi	r30, 0x9E	; 158
+     828:	ff 4f       	sbci	r31, 0xFF	; 255
+     82a:	83 81       	ldd	r24, Z+3	; 0x03
+     82c:	89 83       	std	Y+1, r24	; 0x01
+     82e:	89 81       	ldd	r24, Y+1	; 0x01
+     830:	90 e0       	ldi	r25, 0x00	; 0
+     832:	fc 01       	movw	r30, r24
+     834:	ee 0f       	add	r30, r30
+     836:	ff 1f       	adc	r31, r31
+     838:	ee 0f       	add	r30, r30
+     83a:	ff 1f       	adc	r31, r31
+     83c:	8e 0f       	add	r24, r30
+     83e:	9f 1f       	adc	r25, r31
+     840:	fc 01       	movw	r30, r24
+     842:	ee 59       	subi	r30, 0x9E	; 158
+     844:	ff 4f       	sbci	r31, 0xFF	; 255
+     846:	83 81       	ldd	r24, Z+3	; 0x03
+     848:	81 11       	cpse	r24, r1
+     84a:	e3 cf       	rjmp	.-58     	; 0x812 <orders_sensors_push_back_order+0xac>
+		orders_sensors_orders[temp].super.next = i;
+     84c:	89 81       	ldd	r24, Y+1	; 0x01
+     84e:	90 e0       	ldi	r25, 0x00	; 0
+     850:	fc 01       	movw	r30, r24
+     852:	ee 0f       	add	r30, r30
+     854:	ff 1f       	adc	r31, r31
+     856:	ee 0f       	add	r30, r30
+     858:	ff 1f       	adc	r31, r31
+     85a:	8e 0f       	add	r24, r30
+     85c:	9f 1f       	adc	r25, r31
+     85e:	fc 01       	movw	r30, r24
+     860:	ee 59       	subi	r30, 0x9E	; 158
+     862:	ff 4f       	sbci	r31, 0xFF	; 255
+     864:	13 83       	std	Z+3, r17	; 0x03
+	}else //EMPTY ORDERS LIST
+	{
+		orders_sensors_orders_head = i;
+	}
+	
+	return 0;
+     866:	80 e0       	ldi	r24, 0x00	; 0
+     868:	04 c0       	rjmp	.+8      	; 0x872 <orders_sensors_push_back_order+0x10c>
+	{
+		while(orders_sensors_orders[temp].super.next != 0) temp = orders_sensors_orders[temp].super.next;
+		orders_sensors_orders[temp].super.next = i;
+	}else //EMPTY ORDERS LIST
+	{
+		orders_sensors_orders_head = i;
+     86a:	10 93 da 00 	sts	0x00DA, r17	; 0x8000da <orders_sensors_orders_head>
+     86e:	01 c0       	rjmp	.+2      	; 0x872 <orders_sensors_push_back_order+0x10c>
+	{
+		if(orders_sensors_orders[i].order == 0)
+		break;
+	}
+	if(i == ORDERS_TOTAL_SENSORS_ORDERS_NUMBER) // TABLE IS FULFILLED
+	return 1;
+     870:	81 e0       	ldi	r24, 0x01	; 1
+	{
+		orders_sensors_orders_head = i;
+	}
+	
+	return 0;
+}
+     872:	0f 90       	pop	r0
+     874:	df 91       	pop	r29
+     876:	cf 91       	pop	r28
+     878:	1f 91       	pop	r17
+     87a:	ff 90       	pop	r15
+     87c:	ef 90       	pop	r14
+     87e:	08 95       	ret
+
+00000880 <orders_get_barrier_from_char>:
+enum Orders_Barrier_Device orders_get_barrier_from_char(char char_barrier_arg)
+{
+	enum Orders_Barrier_Device enum_barrier;
+	switch(char_barrier_arg)
+     880:	8f 36       	cpi	r24, 0x6F	; 111
+     882:	29 f0       	breq	.+10     	; 0x88e <orders_get_barrier_from_char+0xe>
+     884:	83 37       	cpi	r24, 0x73	; 115
+     886:	49 f0       	breq	.+18     	; 0x89a <orders_get_barrier_from_char+0x1a>
+     888:	82 36       	cpi	r24, 0x62	; 98
+     88a:	29 f4       	brne	.+10     	; 0x896 <orders_get_barrier_from_char+0x16>
+     88c:	02 c0       	rjmp	.+4      	; 0x892 <orders_get_barrier_from_char+0x12>
+	{
+		case 's':
+		enum_barrier = STEPPER_DEVICE;
+		break;
+		case 'o':
+		enum_barrier = SERVO_DEVICE;
+     88e:	81 e0       	ldi	r24, 0x01	; 1
+     890:	08 95       	ret
+		break;
+		case 'b':
+		enum_barrier = SENSOR_DEVICE;
+     892:	82 e0       	ldi	r24, 0x02	; 2
+		break;
+     894:	08 95       	ret
+		
+		default:
+		enum_barrier = NUM_OF_DIFF_DEVICES;
+     896:	83 e0       	ldi	r24, 0x03	; 3
+		break;
+     898:	08 95       	ret
+{
+	enum Orders_Barrier_Device enum_barrier;
+	switch(char_barrier_arg)
+	{
+		case 's':
+		enum_barrier = STEPPER_DEVICE;
+     89a:	80 e0       	ldi	r24, 0x00	; 0
+		default:
+		enum_barrier = NUM_OF_DIFF_DEVICES;
+		break;
+	}
+	return enum_barrier;
+     89c:	08 95       	ret
+
+0000089e <__vector_14>:
+	if(sensors_sensor_index > 4)
+	{
+		sensors_sensor_index = 0;
+	}
+	else
+	sensors_sensor_index++;
+     89e:	1f 92       	push	r1
+     8a0:	0f 92       	push	r0
+     8a2:	0f b6       	in	r0, 0x3f	; 63
+     8a4:	0f 92       	push	r0
+     8a6:	11 24       	eor	r1, r1
+     8a8:	36 9a       	sbi	0x06, 6	; 6
+     8aa:	0f 90       	pop	r0
+     8ac:	0f be       	out	0x3f, r0	; 63
+     8ae:	0f 90       	pop	r0
+     8b0:	1f 90       	pop	r1
+     8b2:	18 95       	reti
+
+000008b4 <buttons_init_io>:
+	ADCSRA |= (1<<ADSC);
+}
+
+void buttons_init_io(void)
+{
+	debounce_cnt = 0;
+     8b4:	10 92 f5 01 	sts	0x01F5, r1	; 0x8001f5 <debounce_cnt>
+	//Setup Buttons
+	KEY_DDR &= ~((1<<KEY0) | (1<<KEY1));  //Set pins as input
+     8b8:	8a b3       	in	r24, 0x1a	; 26
+     8ba:	8f 73       	andi	r24, 0x3F	; 63
+     8bc:	8a bb       	out	0x1a, r24	; 26
+	KEY_PORT |= (1<<KEY0) | (1<<KEY1);    //enable pull-up resistors
+     8be:	8b b3       	in	r24, 0x1b	; 27
+     8c0:	80 6c       	ori	r24, 0xC0	; 192
+     8c2:	8b bb       	out	0x1b, r24	; 27
+     8c4:	08 95       	ret
+
+000008c6 <sensors_init>:
+	sensors_decision = 0;
+	sensors_sensors[0] = 0;
+	sensors_sensors[1] = 0;
+	sensors_sensors[2] = 0;*/
+	
+	buttons_init_io();
+     8c6:	0e 94 5a 04 	call	0x8b4	; 0x8b4 <buttons_init_io>
+	
+	SENSORS_IN_PORT  &= ~( (1<<SENSORS_IN_A)|(1<<SENSORS_IN_B)|(1<<SENSORS_IN_C) ); // Sensors port without pullups
+     8ca:	8b b3       	in	r24, 0x1b	; 27
+     8cc:	88 7f       	andi	r24, 0xF8	; 248
+     8ce:	8b bb       	out	0x1b, r24	; 27
+	SENSORS_IN_DDR   &= ~( (1<<SENSORS_IN_A)|(1<<SENSORS_IN_B)|(1<<SENSORS_IN_C) );  // Sensors port as input
+     8d0:	8a b3       	in	r24, 0x1a	; 26
+     8d2:	88 7f       	andi	r24, 0xF8	; 248
+     8d4:	8a bb       	out	0x1a, r24	; 26
+	
+	ADMUX  |= (1<<REFS0); // AREF with external capacitor
+     8d6:	3e 9a       	sbi	0x07, 6	; 7
+	ADCSRA |= (1<<ADEN)|(1<<ADIE); // ADC enabled, ADC interrupt enabled
+     8d8:	86 b1       	in	r24, 0x06	; 6
+     8da:	88 68       	ori	r24, 0x88	; 136
+     8dc:	86 b9       	out	0x06, r24	; 6
+	
+	// EDIT BELOW IF OTHER THAN 16MHZ RESONATOR IS BEING USED
+	ADCSRA |= (1<<ADPS0)|(1<<ADPS1)|(1<<ADPS2); // 125 kHz for 16 MHz resonator, read the ADCSRA description for details
+     8de:	86 b1       	in	r24, 0x06	; 6
+     8e0:	87 60       	ori	r24, 0x07	; 7
+     8e2:	86 b9       	out	0x06, r24	; 6
+	/////////////////////////////////////////////////////////
+	
+	ADCSRA |= (1<<ADSC);
+     8e4:	36 9a       	sbi	0x06, 6	; 6
+     8e6:	08 95       	ret
+
+000008e8 <get_key_press>:
+	KEY_PORT |= (1<<KEY0) | (1<<KEY1);    //enable pull-up resistors
+}
+
+uint8_t get_key_press( uint8_t key_mask )
+{
+	cli();            // read and clear atomic !
+     8e8:	f8 94       	cli
+	key_mask &= key_press;    // read key(s)
+     8ea:	90 91 e8 01 	lds	r25, 0x01E8	; 0x8001e8 <key_press>
+     8ee:	89 23       	and	r24, r25
+	key_press ^= key_mask;    // clear key(s)
+     8f0:	90 91 e8 01 	lds	r25, 0x01E8	; 0x8001e8 <key_press>
+     8f4:	98 27       	eor	r25, r24
+     8f6:	90 93 e8 01 	sts	0x01E8, r25	; 0x8001e8 <key_press>
+	sei();            // enable interrupts
+     8fa:	78 94       	sei
+	return key_mask;
+     8fc:	08 95       	ret
+
+000008fe <servo_init>:
+ *  Author: lukasz.jamroz
+ */ 
+#include "servo.h"
+
+void servo_init()
+{
+     8fe:	20 e0       	ldi	r18, 0x00	; 0
+     900:	30 e0       	ldi	r19, 0x00	; 0
+	for(uint8_t i = 0;i<SERVO_ORDERS_TOTAL_NUMBER; i++)
+	{
+		servo_orders_table[i].customer_index = 0;
+     902:	c9 01       	movw	r24, r18
+     904:	88 0f       	add	r24, r24
+     906:	99 1f       	adc	r25, r25
+     908:	fc 01       	movw	r30, r24
+     90a:	e2 0f       	add	r30, r18
+     90c:	f3 1f       	adc	r31, r19
+     90e:	ee 0f       	add	r30, r30
+     910:	ff 1f       	adc	r31, r31
+     912:	e5 51       	subi	r30, 0x15	; 21
+     914:	ff 4f       	sbci	r31, 0xFF	; 255
+     916:	10 82       	st	Z, r1
+		servo_orders_table[i].barrier.value = 0;
+     918:	14 82       	std	Z+4, r1	; 0x04
+		servo_orders_table[i].next = 0;
+     91a:	15 82       	std	Z+5, r1	; 0x05
+		servo_orders_table[i].position = 0;
+     91c:	fc 01       	movw	r30, r24
+     91e:	e2 0f       	add	r30, r18
+     920:	f3 1f       	adc	r31, r19
+     922:	ee 0f       	add	r30, r30
+     924:	ff 1f       	adc	r31, r31
+     926:	e5 51       	subi	r30, 0x15	; 21
+     928:	ff 4f       	sbci	r31, 0xFF	; 255
+     92a:	12 82       	std	Z+2, r1	; 0x02
+     92c:	11 82       	std	Z+1, r1	; 0x01
+     92e:	2f 5f       	subi	r18, 0xFF	; 255
+     930:	3f 4f       	sbci	r19, 0xFF	; 255
+ */ 
+#include "servo.h"
+
+void servo_init()
+{
+	for(uint8_t i = 0;i<SERVO_ORDERS_TOTAL_NUMBER; i++)
+     932:	2d 30       	cpi	r18, 0x0D	; 13
+     934:	31 05       	cpc	r19, r1
+     936:	29 f7       	brne	.-54     	; 0x902 <servo_init+0x4>
+     938:	30 c0       	rjmp	.+96     	; 0x99a <servo_init+0x9c>
+		servo_orders_table[i].position = 0;
+	}
+	
+	for(uint8_t index = 0;index<SERVO_NUM_OF_SERVOS;index++)
+	{
+		if( (servo_servos_table[index].port == &PORTD) && (servo_servos_table[index].pin == PD5) )
+     93a:	80 91 e6 00 	lds	r24, 0x00E6	; 0x8000e6 <servo_servos_table+0x3>
+     93e:	85 30       	cpi	r24, 0x05	; 5
+     940:	21 f5       	brne	.+72     	; 0x98a <servo_init+0x8c>
+		{
+			//Set pins as output and no pullup
+			DDRD  |= (1<<servo_servos_table[index].pin);
+     942:	e3 ee       	ldi	r30, 0xE3	; 227
+     944:	f0 e0       	ldi	r31, 0x00	; 0
+     946:	23 81       	ldd	r18, Z+3	; 0x03
+     948:	41 b3       	in	r20, 0x11	; 17
+     94a:	81 e0       	ldi	r24, 0x01	; 1
+     94c:	90 e0       	ldi	r25, 0x00	; 0
+     94e:	bc 01       	movw	r22, r24
+     950:	02 c0       	rjmp	.+4      	; 0x956 <servo_init+0x58>
+     952:	66 0f       	add	r22, r22
+     954:	77 1f       	adc	r23, r23
+     956:	2a 95       	dec	r18
+     958:	e2 f7       	brpl	.-8      	; 0x952 <servo_init+0x54>
+     95a:	9b 01       	movw	r18, r22
+     95c:	24 2b       	or	r18, r20
+     95e:	21 bb       	out	0x11, r18	; 17
+			PORTD &= ~(1<<servo_servos_table[index].pin);
+     960:	33 81       	ldd	r19, Z+3	; 0x03
+     962:	22 b3       	in	r18, 0x12	; 18
+     964:	02 c0       	rjmp	.+4      	; 0x96a <servo_init+0x6c>
+     966:	88 0f       	add	r24, r24
+     968:	99 1f       	adc	r25, r25
+     96a:	3a 95       	dec	r19
+     96c:	e2 f7       	brpl	.-8      	; 0x966 <servo_init+0x68>
+     96e:	80 95       	com	r24
+     970:	90 95       	com	r25
+     972:	82 23       	and	r24, r18
+     974:	82 bb       	out	0x12, r24	; 18
+			OCR1A = servo_servos_table[index].actual_position;
+     976:	84 81       	ldd	r24, Z+4	; 0x04
+     978:	95 81       	ldd	r25, Z+5	; 0x05
+     97a:	9b bd       	out	0x2b, r25	; 43
+     97c:	8a bd       	out	0x2a, r24	; 42
+			
+			TCCR1A|=(1<<COM1A1)|(1<<WGM11);        //NON Inverted PWM
+     97e:	8f b5       	in	r24, 0x2f	; 47
+     980:	82 68       	ori	r24, 0x82	; 130
+     982:	8f bd       	out	0x2f, r24	; 47
+			TCCR1B|=(1<<WGM13)|(1<<WGM12)|(1<<CS11)|(1<<CS10); //PRESCALER=64 MODE 14(FAST PWM)
+     984:	8e b5       	in	r24, 0x2e	; 46
+     986:	8b 61       	ori	r24, 0x1B	; 27
+     988:	8e bd       	out	0x2e, r24	; 46
+		}
+	}
+	
+	ICR1=4999;  //fPWM=50Hz (Period = 20ms Standard).
+     98a:	87 e8       	ldi	r24, 0x87	; 135
+     98c:	93 e1       	ldi	r25, 0x13	; 19
+     98e:	97 bd       	out	0x27, r25	; 39
+     990:	86 bd       	out	0x26, r24	; 38
+	TIMSK |= (1<<OCIE1A)|(1<<OCIE1B);
+     992:	89 b7       	in	r24, 0x39	; 57
+     994:	88 61       	ori	r24, 0x18	; 24
+     996:	89 bf       	out	0x39, r24	; 57
+     998:	08 95       	ret
+		servo_orders_table[i].position = 0;
+	}
+	
+	for(uint8_t index = 0;index<SERVO_NUM_OF_SERVOS;index++)
+	{
+		if( (servo_servos_table[index].port == &PORTD) && (servo_servos_table[index].pin == PD5) )
+     99a:	80 91 e4 00 	lds	r24, 0x00E4	; 0x8000e4 <servo_servos_table+0x1>
+     99e:	90 91 e5 00 	lds	r25, 0x00E5	; 0x8000e5 <servo_servos_table+0x2>
+     9a2:	c2 97       	sbiw	r24, 0x32	; 50
+     9a4:	91 f7       	brne	.-28     	; 0x98a <servo_init+0x8c>
+     9a6:	c9 cf       	rjmp	.-110    	; 0x93a <servo_init+0x3c>
+
+000009a8 <__vector_6>:
+	
+	ICR1=4999;  //fPWM=50Hz (Period = 20ms Standard).
+	TIMSK |= (1<<OCIE1A)|(1<<OCIE1B);
+}
+ISR(TIMER1_COMPA_vect)
+{
+     9a8:	1f 92       	push	r1
+     9aa:	0f 92       	push	r0
+     9ac:	0f b6       	in	r0, 0x3f	; 63
+     9ae:	0f 92       	push	r0
+     9b0:	11 24       	eor	r1, r1
+     9b2:	2f 93       	push	r18
+     9b4:	8f 93       	push	r24
+     9b6:	9f 93       	push	r25
+     9b8:	af 93       	push	r26
+     9ba:	bf 93       	push	r27
+     9bc:	ef 93       	push	r30
+     9be:	ff 93       	push	r31
+	for(uint8_t index = 0;index<SERVO_NUM_OF_SERVOS;index++)
+	{
+		if(servo_servos_table[index].barrier_delay > 0){
+     9c0:	80 91 ea 00 	lds	r24, 0x00EA	; 0x8000ea <servo_servos_table+0x7>
+     9c4:	88 23       	and	r24, r24
+     9c6:	09 f4       	brne	.+2      	; 0x9ca <__vector_6+0x22>
+     9c8:	4f c0       	rjmp	.+158    	; 0xa68 <__vector_6+0xc0>
+			if( servo_servos_table[index].barrier_delay > 99 )
+     9ca:	80 91 ea 00 	lds	r24, 0x00EA	; 0x8000ea <servo_servos_table+0x7>
+     9ce:	84 36       	cpi	r24, 0x64	; 100
+     9d0:	08 f4       	brcc	.+2      	; 0x9d4 <__vector_6+0x2c>
+     9d2:	45 c0       	rjmp	.+138    	; 0xa5e <__vector_6+0xb6>
+			{
+				uint8_t temp = servo_orders_table[ servo_servos_table[index].orders_head ].next;
+     9d4:	a3 ee       	ldi	r26, 0xE3	; 227
+     9d6:	b0 e0       	ldi	r27, 0x00	; 0
+     9d8:	16 96       	adiw	r26, 0x06	; 6
+     9da:	8c 91       	ld	r24, X
+     9dc:	16 97       	sbiw	r26, 0x06	; 6
+     9de:	90 e0       	ldi	r25, 0x00	; 0
+     9e0:	fc 01       	movw	r30, r24
+     9e2:	ee 0f       	add	r30, r30
+     9e4:	ff 1f       	adc	r31, r31
+     9e6:	e8 0f       	add	r30, r24
+     9e8:	f9 1f       	adc	r31, r25
+     9ea:	ee 0f       	add	r30, r30
+     9ec:	ff 1f       	adc	r31, r31
+     9ee:	e5 51       	subi	r30, 0x15	; 21
+     9f0:	ff 4f       	sbci	r31, 0xFF	; 255
+     9f2:	25 81       	ldd	r18, Z+5	; 0x05
+				servo_orders_table[ servo_servos_table[index].orders_head ].next = 0;
+     9f4:	16 96       	adiw	r26, 0x06	; 6
+     9f6:	8c 91       	ld	r24, X
+     9f8:	16 97       	sbiw	r26, 0x06	; 6
+     9fa:	90 e0       	ldi	r25, 0x00	; 0
+     9fc:	fc 01       	movw	r30, r24
+     9fe:	ee 0f       	add	r30, r30
+     a00:	ff 1f       	adc	r31, r31
+     a02:	e8 0f       	add	r30, r24
+     a04:	f9 1f       	adc	r31, r25
+     a06:	ee 0f       	add	r30, r30
+     a08:	ff 1f       	adc	r31, r31
+     a0a:	e5 51       	subi	r30, 0x15	; 21
+     a0c:	ff 4f       	sbci	r31, 0xFF	; 255
+     a0e:	15 82       	std	Z+5, r1	; 0x05
+				servo_orders_table[ servo_servos_table[index].orders_head ].barrier.value = 0; //barrier.device to write next?
+     a10:	16 96       	adiw	r26, 0x06	; 6
+     a12:	8c 91       	ld	r24, X
+     a14:	16 97       	sbiw	r26, 0x06	; 6
+     a16:	90 e0       	ldi	r25, 0x00	; 0
+     a18:	fc 01       	movw	r30, r24
+     a1a:	ee 0f       	add	r30, r30
+     a1c:	ff 1f       	adc	r31, r31
+     a1e:	e8 0f       	add	r30, r24
+     a20:	f9 1f       	adc	r31, r25
+     a22:	ee 0f       	add	r30, r30
+     a24:	ff 1f       	adc	r31, r31
+     a26:	e5 51       	subi	r30, 0x15	; 21
+     a28:	ff 4f       	sbci	r31, 0xFF	; 255
+     a2a:	14 82       	std	Z+4, r1	; 0x04
+				servo_orders_table[ servo_servos_table[index].orders_head ].position = 0;
+     a2c:	16 96       	adiw	r26, 0x06	; 6
+     a2e:	8c 91       	ld	r24, X
+     a30:	16 97       	sbiw	r26, 0x06	; 6
+     a32:	90 e0       	ldi	r25, 0x00	; 0
+     a34:	fc 01       	movw	r30, r24
+     a36:	ee 0f       	add	r30, r30
+     a38:	ff 1f       	adc	r31, r31
+     a3a:	e8 0f       	add	r30, r24
+     a3c:	f9 1f       	adc	r31, r25
+     a3e:	ee 0f       	add	r30, r30
+     a40:	ff 1f       	adc	r31, r31
+     a42:	e5 51       	subi	r30, 0x15	; 21
+     a44:	ff 4f       	sbci	r31, 0xFF	; 255
+     a46:	12 82       	std	Z+2, r1	; 0x02
+     a48:	11 82       	std	Z+1, r1	; 0x01
+				
+				servo_servos_table[index].orders_head = temp;
+     a4a:	16 96       	adiw	r26, 0x06	; 6
+     a4c:	2c 93       	st	X, r18
+     a4e:	16 97       	sbiw	r26, 0x06	; 6
+				servo_servos_table[index].actual_position = 0;
+     a50:	15 96       	adiw	r26, 0x05	; 5
+     a52:	1c 92       	st	X, r1
+     a54:	1e 92       	st	-X, r1
+     a56:	14 97       	sbiw	r26, 0x04	; 4
+				servo_servos_table[index].barrier_delay = 0;
+     a58:	17 96       	adiw	r26, 0x07	; 7
+     a5a:	1c 92       	st	X, r1
+     a5c:	05 c0       	rjmp	.+10     	; 0xa68 <__vector_6+0xc0>
+			}else
+				servo_servos_table[index].barrier_delay++;
+     a5e:	e3 ee       	ldi	r30, 0xE3	; 227
+     a60:	f0 e0       	ldi	r31, 0x00	; 0
+     a62:	87 81       	ldd	r24, Z+7	; 0x07
+     a64:	8f 5f       	subi	r24, 0xFF	; 255
+     a66:	87 83       	std	Z+7, r24	; 0x07
+		}
+	}
+}
+     a68:	ff 91       	pop	r31
+     a6a:	ef 91       	pop	r30
+     a6c:	bf 91       	pop	r27
+     a6e:	af 91       	pop	r26
+     a70:	9f 91       	pop	r25
+     a72:	8f 91       	pop	r24
+     a74:	2f 91       	pop	r18
+     a76:	0f 90       	pop	r0
+     a78:	0f be       	out	0x3f, r0	; 63
+     a7a:	0f 90       	pop	r0
+     a7c:	1f 90       	pop	r1
+     a7e:	18 95       	reti
+
+00000a80 <servo_set_servo>:
+void servo_set_servo(enum ServoIndexes index_arg, uint16_t value)
+{
+	if( (servo_servos_table[index_arg].port == &PORTD) && (servo_servos_table[index_arg].pin == PD5) )
+     a80:	90 e0       	ldi	r25, 0x00	; 0
+     a82:	fc 01       	movw	r30, r24
+     a84:	ee 0f       	add	r30, r30
+     a86:	ff 1f       	adc	r31, r31
+     a88:	ee 0f       	add	r30, r30
+     a8a:	ff 1f       	adc	r31, r31
+     a8c:	ee 0f       	add	r30, r30
+     a8e:	ff 1f       	adc	r31, r31
+     a90:	ed 51       	subi	r30, 0x1D	; 29
+     a92:	ff 4f       	sbci	r31, 0xFF	; 255
+     a94:	21 81       	ldd	r18, Z+1	; 0x01
+     a96:	32 81       	ldd	r19, Z+2	; 0x02
+     a98:	22 33       	cpi	r18, 0x32	; 50
+     a9a:	31 05       	cpc	r19, r1
+     a9c:	89 f4       	brne	.+34     	; 0xac0 <servo_set_servo+0x40>
+     a9e:	88 0f       	add	r24, r24
+     aa0:	99 1f       	adc	r25, r25
+     aa2:	88 0f       	add	r24, r24
+     aa4:	99 1f       	adc	r25, r25
+     aa6:	88 0f       	add	r24, r24
+     aa8:	99 1f       	adc	r25, r25
+     aaa:	fc 01       	movw	r30, r24
+     aac:	ed 51       	subi	r30, 0x1D	; 29
+     aae:	ff 4f       	sbci	r31, 0xFF	; 255
+     ab0:	83 81       	ldd	r24, Z+3	; 0x03
+     ab2:	85 30       	cpi	r24, 0x05	; 5
+     ab4:	29 f4       	brne	.+10     	; 0xac0 <servo_set_servo+0x40>
+	{
+		if(value != 0) OCR1A = value;
+     ab6:	61 15       	cp	r22, r1
+     ab8:	71 05       	cpc	r23, r1
+     aba:	11 f0       	breq	.+4      	; 0xac0 <servo_set_servo+0x40>
+     abc:	7b bd       	out	0x2b, r23	; 43
+     abe:	6a bd       	out	0x2a, r22	; 42
+     ac0:	08 95       	ret
+
+00000ac2 <servo_add_servo>:
+	}
+}
+void servo_add_servo(enum ServoIndexes index_arg, volatile uint8_t* port_arg, uint8_t pin_arg, uint16_t basic_position_arg)
+{
+	servo_servos_table[index_arg].index = index_arg;
+     ac2:	e8 2f       	mov	r30, r24
+     ac4:	f0 e0       	ldi	r31, 0x00	; 0
+     ac6:	ee 0f       	add	r30, r30
+     ac8:	ff 1f       	adc	r31, r31
+     aca:	ee 0f       	add	r30, r30
+     acc:	ff 1f       	adc	r31, r31
+     ace:	ee 0f       	add	r30, r30
+     ad0:	ff 1f       	adc	r31, r31
+     ad2:	ed 51       	subi	r30, 0x1D	; 29
+     ad4:	ff 4f       	sbci	r31, 0xFF	; 255
+     ad6:	80 83       	st	Z, r24
+	servo_servos_table[index_arg].actual_position = basic_position_arg;
+     ad8:	35 83       	std	Z+5, r19	; 0x05
+     ada:	24 83       	std	Z+4, r18	; 0x04
+	servo_servos_table[index_arg].pin = pin_arg;
+     adc:	43 83       	std	Z+3, r20	; 0x03
+	servo_servos_table[index_arg].port = port_arg;
+     ade:	72 83       	std	Z+2, r23	; 0x02
+     ae0:	61 83       	std	Z+1, r22	; 0x01
+	servo_servos_table[index_arg].barrier_delay = 0;
+     ae2:	17 82       	std	Z+7, r1	; 0x07
+     ae4:	08 95       	ret
+
+00000ae6 <servo_push_back_order>:
+	
+}
+void servo_push_back_order(enum ServoIndexes index_arg,uint16_t position_arg, 
+							uint8_t customer_barrier_arg, uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_type_arg)
+{
+     ae6:	af 92       	push	r10
+     ae8:	bf 92       	push	r11
+     aea:	df 92       	push	r13
+     aec:	ef 92       	push	r14
+     aee:	ff 92       	push	r15
+     af0:	0f 93       	push	r16
+     af2:	1f 93       	push	r17
+     af4:	cf 93       	push	r28
+     af6:	df 93       	push	r29
+     af8:	1f 92       	push	r1
+     afa:	cd b7       	in	r28, 0x3d	; 61
+     afc:	de b7       	in	r29, 0x3e	; 62
+     afe:	d8 2e       	mov	r13, r24
+	uint8_t i;
+	for(i = 1;i<SERVO_ORDERS_TOTAL_NUMBER; i++)
+	{
+		if(servo_orders_table[i].position == 0)
+     b00:	80 91 f2 00 	lds	r24, 0x00F2	; 0x8000f2 <servo_orders_table+0x7>
+     b04:	90 91 f3 00 	lds	r25, 0x00F3	; 0x8000f3 <servo_orders_table+0x8>
+     b08:	89 2b       	or	r24, r25
+     b0a:	99 f0       	breq	.+38     	; 0xb32 <servo_push_back_order+0x4c>
+     b0c:	a2 e0       	ldi	r26, 0x02	; 2
+     b0e:	b0 e0       	ldi	r27, 0x00	; 0
+     b10:	1a 2f       	mov	r17, r26
+     b12:	7d 01       	movw	r14, r26
+     b14:	fd 01       	movw	r30, r26
+     b16:	ee 0f       	add	r30, r30
+     b18:	ff 1f       	adc	r31, r31
+     b1a:	ea 0f       	add	r30, r26
+     b1c:	fb 1f       	adc	r31, r27
+     b1e:	ee 0f       	add	r30, r30
+     b20:	ff 1f       	adc	r31, r31
+     b22:	e5 51       	subi	r30, 0x15	; 21
+     b24:	ff 4f       	sbci	r31, 0xFF	; 255
+     b26:	01 80       	ldd	r0, Z+1	; 0x01
+     b28:	f2 81       	ldd	r31, Z+2	; 0x02
+     b2a:	e0 2d       	mov	r30, r0
+     b2c:	ef 2b       	or	r30, r31
+     b2e:	31 f5       	brne	.+76     	; 0xb7c <servo_push_back_order+0x96>
+     b30:	04 c0       	rjmp	.+8      	; 0xb3a <servo_push_back_order+0x54>
+     b32:	ee 24       	eor	r14, r14
+     b34:	e3 94       	inc	r14
+     b36:	f1 2c       	mov	r15, r1
+}
+void servo_push_back_order(enum ServoIndexes index_arg,uint16_t position_arg, 
+							uint8_t customer_barrier_arg, uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_type_arg)
+{
+	uint8_t i;
+	for(i = 1;i<SERVO_ORDERS_TOTAL_NUMBER; i++)
+     b38:	11 e0       	ldi	r17, 0x01	; 1
+	{
+		if(servo_orders_table[i].position == 0)
+		{
+			servo_orders_table[i].position = position_arg;
+     b3a:	57 01       	movw	r10, r14
+     b3c:	aa 0c       	add	r10, r10
+     b3e:	bb 1c       	adc	r11, r11
+     b40:	d5 01       	movw	r26, r10
+     b42:	ae 0d       	add	r26, r14
+     b44:	bf 1d       	adc	r27, r15
+     b46:	aa 0f       	add	r26, r26
+     b48:	bb 1f       	adc	r27, r27
+     b4a:	a5 51       	subi	r26, 0x15	; 21
+     b4c:	bf 4f       	sbci	r27, 0xFF	; 255
+     b4e:	12 96       	adiw	r26, 0x02	; 2
+     b50:	7c 93       	st	X, r23
+     b52:	6e 93       	st	-X, r22
+     b54:	11 97       	sbiw	r26, 0x01	; 1
+			servo_orders_table[i].customer_index = customer_index_arg;
+     b56:	2c 93       	st	X, r18
+			servo_orders_table[i].next = 0;
+     b58:	15 96       	adiw	r26, 0x05	; 5
+     b5a:	1c 92       	st	X, r1
+     b5c:	15 97       	sbiw	r26, 0x05	; 5
+			servo_orders_table[i].barrier.device = barrier_type_arg;
+     b5e:	13 96       	adiw	r26, 0x03	; 3
+     b60:	0c 93       	st	X, r16
+			servo_orders_table[i].barrier.value = orders_get_barrier_index(barrier_type_arg, customer_barrier_arg);
+     b62:	64 2f       	mov	r22, r20
+     b64:	80 2f       	mov	r24, r16
+     b66:	0e 94 28 02 	call	0x450	; 0x450 <orders_get_barrier_index>
+     b6a:	f5 01       	movw	r30, r10
+     b6c:	ee 0d       	add	r30, r14
+     b6e:	ff 1d       	adc	r31, r15
+     b70:	ee 0f       	add	r30, r30
+     b72:	ff 1f       	adc	r31, r31
+     b74:	e5 51       	subi	r30, 0x15	; 21
+     b76:	ff 4f       	sbci	r31, 0xFF	; 255
+     b78:	84 83       	std	Z+4, r24	; 0x04
+			break;
+     b7a:	06 c0       	rjmp	.+12     	; 0xb88 <servo_push_back_order+0xa2>
+     b7c:	11 e0       	ldi	r17, 0x01	; 1
+     b7e:	1a 0f       	add	r17, r26
+     b80:	11 96       	adiw	r26, 0x01	; 1
+}
+void servo_push_back_order(enum ServoIndexes index_arg,uint16_t position_arg, 
+							uint8_t customer_barrier_arg, uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_type_arg)
+{
+	uint8_t i;
+	for(i = 1;i<SERVO_ORDERS_TOTAL_NUMBER; i++)
+     b82:	ad 30       	cpi	r26, 0x0D	; 13
+     b84:	b1 05       	cpc	r27, r1
+     b86:	21 f6       	brne	.-120    	; 0xb10 <servo_push_back_order+0x2a>
+			servo_orders_table[i].barrier.device = barrier_type_arg;
+			servo_orders_table[i].barrier.value = orders_get_barrier_index(barrier_type_arg, customer_barrier_arg);
+			break;
+		}
+	}	
+	volatile uint8_t temp = servo_servos_table[index_arg].orders_head;
+     b88:	8d 2d       	mov	r24, r13
+     b8a:	90 e0       	ldi	r25, 0x00	; 0
+     b8c:	fc 01       	movw	r30, r24
+     b8e:	ee 0f       	add	r30, r30
+     b90:	ff 1f       	adc	r31, r31
+     b92:	ee 0f       	add	r30, r30
+     b94:	ff 1f       	adc	r31, r31
+     b96:	ee 0f       	add	r30, r30
+     b98:	ff 1f       	adc	r31, r31
+     b9a:	ed 51       	subi	r30, 0x1D	; 29
+     b9c:	ff 4f       	sbci	r31, 0xFF	; 255
+     b9e:	26 81       	ldd	r18, Z+6	; 0x06
+     ba0:	29 83       	std	Y+1, r18	; 0x01
+	if(temp != 0)
+     ba2:	29 81       	ldd	r18, Y+1	; 0x01
+     ba4:	22 23       	and	r18, r18
+     ba6:	b1 f1       	breq	.+108    	; 0xc14 <servo_push_back_order+0x12e>
+	{
+		while(servo_orders_table[temp].next != 0) temp = servo_orders_table[temp].next;
+     ba8:	89 81       	ldd	r24, Y+1	; 0x01
+     baa:	90 e0       	ldi	r25, 0x00	; 0
+     bac:	fc 01       	movw	r30, r24
+     bae:	ee 0f       	add	r30, r30
+     bb0:	ff 1f       	adc	r31, r31
+     bb2:	e8 0f       	add	r30, r24
+     bb4:	f9 1f       	adc	r31, r25
+     bb6:	ee 0f       	add	r30, r30
+     bb8:	ff 1f       	adc	r31, r31
+     bba:	e5 51       	subi	r30, 0x15	; 21
+     bbc:	ff 4f       	sbci	r31, 0xFF	; 255
+     bbe:	85 81       	ldd	r24, Z+5	; 0x05
+     bc0:	88 23       	and	r24, r24
+     bc2:	d9 f0       	breq	.+54     	; 0xbfa <servo_push_back_order+0x114>
+     bc4:	89 81       	ldd	r24, Y+1	; 0x01
+     bc6:	90 e0       	ldi	r25, 0x00	; 0
+     bc8:	fc 01       	movw	r30, r24
+     bca:	ee 0f       	add	r30, r30
+     bcc:	ff 1f       	adc	r31, r31
+     bce:	e8 0f       	add	r30, r24
+     bd0:	f9 1f       	adc	r31, r25
+     bd2:	ee 0f       	add	r30, r30
+     bd4:	ff 1f       	adc	r31, r31
+     bd6:	e5 51       	subi	r30, 0x15	; 21
+     bd8:	ff 4f       	sbci	r31, 0xFF	; 255
+     bda:	85 81       	ldd	r24, Z+5	; 0x05
+     bdc:	89 83       	std	Y+1, r24	; 0x01
+     bde:	89 81       	ldd	r24, Y+1	; 0x01
+     be0:	90 e0       	ldi	r25, 0x00	; 0
+     be2:	fc 01       	movw	r30, r24
+     be4:	ee 0f       	add	r30, r30
+     be6:	ff 1f       	adc	r31, r31
+     be8:	e8 0f       	add	r30, r24
+     bea:	f9 1f       	adc	r31, r25
+     bec:	ee 0f       	add	r30, r30
+     bee:	ff 1f       	adc	r31, r31
+     bf0:	e5 51       	subi	r30, 0x15	; 21
+     bf2:	ff 4f       	sbci	r31, 0xFF	; 255
+     bf4:	85 81       	ldd	r24, Z+5	; 0x05
+     bf6:	81 11       	cpse	r24, r1
+     bf8:	e5 cf       	rjmp	.-54     	; 0xbc4 <servo_push_back_order+0xde>
+		servo_orders_table[temp].next = i;
+     bfa:	89 81       	ldd	r24, Y+1	; 0x01
+     bfc:	90 e0       	ldi	r25, 0x00	; 0
+     bfe:	fc 01       	movw	r30, r24
+     c00:	ee 0f       	add	r30, r30
+     c02:	ff 1f       	adc	r31, r31
+     c04:	e8 0f       	add	r30, r24
+     c06:	f9 1f       	adc	r31, r25
+     c08:	ee 0f       	add	r30, r30
+     c0a:	ff 1f       	adc	r31, r31
+     c0c:	e5 51       	subi	r30, 0x15	; 21
+     c0e:	ff 4f       	sbci	r31, 0xFF	; 255
+     c10:	15 83       	std	Z+5, r17	; 0x05
+     c12:	0a c0       	rjmp	.+20     	; 0xc28 <servo_push_back_order+0x142>
+	}else
+		{
+			servo_servos_table[index_arg].orders_head = i;
+     c14:	88 0f       	add	r24, r24
+     c16:	99 1f       	adc	r25, r25
+     c18:	88 0f       	add	r24, r24
+     c1a:	99 1f       	adc	r25, r25
+     c1c:	88 0f       	add	r24, r24
+     c1e:	99 1f       	adc	r25, r25
+     c20:	fc 01       	movw	r30, r24
+     c22:	ed 51       	subi	r30, 0x1D	; 29
+     c24:	ff 4f       	sbci	r31, 0xFF	; 255
+     c26:	16 83       	std	Z+6, r17	; 0x06
+		}	
+}
+     c28:	0f 90       	pop	r0
+     c2a:	df 91       	pop	r29
+     c2c:	cf 91       	pop	r28
+     c2e:	1f 91       	pop	r17
+     c30:	0f 91       	pop	r16
+     c32:	ff 90       	pop	r15
+     c34:	ef 90       	pop	r14
+     c36:	df 90       	pop	r13
+     c38:	bf 90       	pop	r11
+     c3a:	af 90       	pop	r10
+     c3c:	08 95       	ret
+
+00000c3e <servo_process_servo>:
+void servo_process_servo(enum ServoIndexes index_arg)
+{
+     c3e:	1f 93       	push	r17
+     c40:	cf 93       	push	r28
+     c42:	df 93       	push	r29
+     c44:	18 2f       	mov	r17, r24
+	uint8_t temp = servo_orders_table[ servo_servos_table[index_arg].orders_head ].barrier.value;
+     c46:	c8 2f       	mov	r28, r24
+     c48:	d0 e0       	ldi	r29, 0x00	; 0
+     c4a:	de 01       	movw	r26, r28
+     c4c:	aa 0f       	add	r26, r26
+     c4e:	bb 1f       	adc	r27, r27
+     c50:	aa 0f       	add	r26, r26
+     c52:	bb 1f       	adc	r27, r27
+     c54:	aa 0f       	add	r26, r26
+     c56:	bb 1f       	adc	r27, r27
+     c58:	ad 51       	subi	r26, 0x1D	; 29
+     c5a:	bf 4f       	sbci	r27, 0xFF	; 255
+     c5c:	16 96       	adiw	r26, 0x06	; 6
+     c5e:	2c 91       	ld	r18, X
+     c60:	16 97       	sbiw	r26, 0x06	; 6
+     c62:	30 e0       	ldi	r19, 0x00	; 0
+     c64:	f9 01       	movw	r30, r18
+     c66:	ee 0f       	add	r30, r30
+     c68:	ff 1f       	adc	r31, r31
+     c6a:	e2 0f       	add	r30, r18
+     c6c:	f3 1f       	adc	r31, r19
+     c6e:	ee 0f       	add	r30, r30
+     c70:	ff 1f       	adc	r31, r31
+     c72:	e5 51       	subi	r30, 0x15	; 21
+     c74:	ff 4f       	sbci	r31, 0xFF	; 255
+     c76:	64 81       	ldd	r22, Z+4	; 0x04
+	enum Orders_Barrier_Device dev = servo_orders_table[ servo_servos_table[index_arg].orders_head ].barrier.device;
+     c78:	16 96       	adiw	r26, 0x06	; 6
+     c7a:	2c 91       	ld	r18, X
+     c7c:	30 e0       	ldi	r19, 0x00	; 0
+     c7e:	f9 01       	movw	r30, r18
+     c80:	ee 0f       	add	r30, r30
+     c82:	ff 1f       	adc	r31, r31
+     c84:	e2 0f       	add	r30, r18
+     c86:	f3 1f       	adc	r31, r19
+     c88:	ee 0f       	add	r30, r30
+     c8a:	ff 1f       	adc	r31, r31
+     c8c:	e5 51       	subi	r30, 0x15	; 21
+     c8e:	ff 4f       	sbci	r31, 0xFF	; 255
+     c90:	83 81       	ldd	r24, Z+3	; 0x03
+	
+	temp = orders_get_barrier( dev, temp);
+     c92:	0e 94 f9 01 	call	0x3f2	; 0x3f2 <orders_get_barrier>
+	
+	if( (temp == 0) && (servo_servos_table[index_arg].barrier_delay == 0) )
+     c96:	81 11       	cpse	r24, r1
+     c98:	23 c0       	rjmp	.+70     	; 0xce0 <servo_process_servo+0xa2>
+     c9a:	fe 01       	movw	r30, r28
+     c9c:	ee 0f       	add	r30, r30
+     c9e:	ff 1f       	adc	r31, r31
+     ca0:	ee 0f       	add	r30, r30
+     ca2:	ff 1f       	adc	r31, r31
+     ca4:	ee 0f       	add	r30, r30
+     ca6:	ff 1f       	adc	r31, r31
+     ca8:	ed 51       	subi	r30, 0x1D	; 29
+     caa:	ff 4f       	sbci	r31, 0xFF	; 255
+     cac:	87 81       	ldd	r24, Z+7	; 0x07
+     cae:	81 11       	cpse	r24, r1
+     cb0:	17 c0       	rjmp	.+46     	; 0xce0 <servo_process_servo+0xa2>
+	{
+		servo_servos_table[index_arg].actual_position = servo_orders_table[ servo_servos_table[index_arg].orders_head ].position;
+     cb2:	ef 01       	movw	r28, r30
+     cb4:	86 81       	ldd	r24, Z+6	; 0x06
+     cb6:	90 e0       	ldi	r25, 0x00	; 0
+     cb8:	fc 01       	movw	r30, r24
+     cba:	ee 0f       	add	r30, r30
+     cbc:	ff 1f       	adc	r31, r31
+     cbe:	e8 0f       	add	r30, r24
+     cc0:	f9 1f       	adc	r31, r25
+     cc2:	ee 0f       	add	r30, r30
+     cc4:	ff 1f       	adc	r31, r31
+     cc6:	e5 51       	subi	r30, 0x15	; 21
+     cc8:	ff 4f       	sbci	r31, 0xFF	; 255
+     cca:	81 81       	ldd	r24, Z+1	; 0x01
+     ccc:	92 81       	ldd	r25, Z+2	; 0x02
+     cce:	9d 83       	std	Y+5, r25	; 0x05
+     cd0:	8c 83       	std	Y+4, r24	; 0x04
+		servo_set_servo(index_arg,servo_servos_table[index_arg].actual_position);
+     cd2:	6c 81       	ldd	r22, Y+4	; 0x04
+     cd4:	7d 81       	ldd	r23, Y+5	; 0x05
+     cd6:	81 2f       	mov	r24, r17
+     cd8:	0e 94 40 05 	call	0xa80	; 0xa80 <servo_set_servo>
+		
+		servo_servos_table[index_arg].barrier_delay = 1;
+     cdc:	81 e0       	ldi	r24, 0x01	; 1
+     cde:	8f 83       	std	Y+7, r24	; 0x07
+	}
+     ce0:	df 91       	pop	r29
+     ce2:	cf 91       	pop	r28
+     ce4:	1f 91       	pop	r17
+     ce6:	08 95       	ret
+
+00000ce8 <stepper_add_motor>:
+ */ 
+#include "stepper.h"
+
+void stepper_add_motor(enum StepperIndexes index_arg, volatile uint8_t* port_arg, enum StepperPlacement placement_arg)
+{
+	stepper_motors_table[index_arg].index = index_arg;
+     ce8:	9b e0       	ldi	r25, 0x0B	; 11
+     cea:	89 9f       	mul	r24, r25
+     cec:	f0 01       	movw	r30, r0
+     cee:	11 24       	eor	r1, r1
+     cf0:	ea 50       	subi	r30, 0x0A	; 10
+     cf2:	fe 4f       	sbci	r31, 0xFE	; 254
+     cf4:	80 83       	st	Z, r24
+	stepper_motors_table[index_arg].port = port_arg;
+     cf6:	72 83       	std	Z+2, r23	; 0x02
+     cf8:	61 83       	std	Z+1, r22	; 0x01
+	stepper_motors_table[index_arg].placement = placement_arg;
+     cfa:	43 83       	std	Z+3, r20	; 0x03
+	stepper_motors_table[index_arg].step = 0;
+     cfc:	10 86       	std	Z+8, r1	; 0x08
+     cfe:	17 82       	std	Z+7, r1	; 0x07
+	stepper_motors_table[index_arg].speed = 0xFF;
+     d00:	8f ef       	ldi	r24, 0xFF	; 255
+     d02:	84 83       	std	Z+4, r24	; 0x04
+	stepper_motors_table[index_arg].limit = 108; // If faster (lower number), the motor wont move
+     d04:	8c e6       	ldi	r24, 0x6C	; 108
+     d06:	82 87       	std	Z+10, r24	; 0x0a
+     d08:	08 95       	ret
+
+00000d0a <stepper_set_speed>:
+}
+void stepper_set_speed(enum StepperIndexes index_arg, uint8_t speed_arg)
+{
+	stepper_motors_table[index_arg].limit = speed_arg;
+     d0a:	2b e0       	ldi	r18, 0x0B	; 11
+     d0c:	82 9f       	mul	r24, r18
+     d0e:	c0 01       	movw	r24, r0
+     d10:	11 24       	eor	r1, r1
+     d12:	fc 01       	movw	r30, r24
+     d14:	ea 50       	subi	r30, 0x0A	; 10
+     d16:	fe 4f       	sbci	r31, 0xFE	; 254
+     d18:	62 87       	std	Z+10, r22	; 0x0a
+     d1a:	08 95       	ret
+
+00000d1c <stepper_init>:
+}
+void stepper_init()
+{	
+	TIMSK |= (1<<TOIE0);
+     d1c:	89 b7       	in	r24, 0x39	; 57
+     d1e:	81 60       	ori	r24, 0x01	; 1
+     d20:	89 bf       	out	0x39, r24	; 57
+	TCNT0 = 1;
+     d22:	81 e0       	ldi	r24, 0x01	; 1
+     d24:	82 bf       	out	0x32, r24	; 50
+	TCCR0 |= (1<<CS00); //interrupts and no prescaler so up to <<< 255 instructions
+     d26:	83 b7       	in	r24, 0x33	; 51
+     d28:	81 60       	ori	r24, 0x01	; 1
+     d2a:	83 bf       	out	0x33, r24	; 51
+     d2c:	08 95       	ret
+
+00000d2e <stepper_fastest_and_init_motors>:
+		}
+	
+	if( stepper_motors_table[index_arg].speed > stepper_motors_table[index_arg].limit ) stepper_motors_table[index_arg].speed--; //limit and speed a little inconsistent namespace
+}
+void stepper_fastest_and_init_motors()
+{
+     d2e:	80 e0       	ldi	r24, 0x00	; 0
+     d30:	90 e0       	ldi	r25, 0x00	; 0
+	uint8_t fastest_speed = 255;
+     d32:	6f ef       	ldi	r22, 0xFF	; 255
+	for(uint8_t index = 0; index < STEPPER_NUM_OF_MOTORS; index++)
+	{
+		if( stepper_motors_table[index].speed < fastest_speed )
+     d34:	2b e0       	ldi	r18, 0x0B	; 11
+     d36:	ac 01       	movw	r20, r24
+     d38:	28 9f       	mul	r18, r24
+     d3a:	f0 01       	movw	r30, r0
+     d3c:	29 9f       	mul	r18, r25
+     d3e:	f0 0d       	add	r31, r0
+     d40:	11 24       	eor	r1, r1
+     d42:	ea 50       	subi	r30, 0x0A	; 10
+     d44:	fe 4f       	sbci	r31, 0xFE	; 254
+     d46:	34 81       	ldd	r19, Z+4	; 0x04
+     d48:	36 17       	cp	r19, r22
+     d4a:	40 f4       	brcc	.+16     	; 0xd5c <stepper_fastest_and_init_motors+0x2e>
+		{
+			fastest_speed = stepper_motors_table[index].speed;
+     d4c:	28 9f       	mul	r18, r24
+     d4e:	f0 01       	movw	r30, r0
+     d50:	29 9f       	mul	r18, r25
+     d52:	f0 0d       	add	r31, r0
+     d54:	11 24       	eor	r1, r1
+     d56:	ea 50       	subi	r30, 0x0A	; 10
+     d58:	fe 4f       	sbci	r31, 0xFE	; 254
+     d5a:	64 81       	ldd	r22, Z+4	; 0x04
+		}
+		stepper_motors_table[index].orders_head = 0;
+     d5c:	24 9f       	mul	r18, r20
+     d5e:	f0 01       	movw	r30, r0
+     d60:	25 9f       	mul	r18, r21
+     d62:	f0 0d       	add	r31, r0
+     d64:	11 24       	eor	r1, r1
+     d66:	ea 50       	subi	r30, 0x0A	; 10
+     d68:	fe 4f       	sbci	r31, 0xFE	; 254
+     d6a:	15 82       	std	Z+5, r1	; 0x05
+		stepper_motors_table[index].timer = 0;
+     d6c:	16 82       	std	Z+6, r1	; 0x06
+     d6e:	01 96       	adiw	r24, 0x01	; 1
+	if( stepper_motors_table[index_arg].speed > stepper_motors_table[index_arg].limit ) stepper_motors_table[index_arg].speed--; //limit and speed a little inconsistent namespace
+}
+void stepper_fastest_and_init_motors()
+{
+	uint8_t fastest_speed = 255;
+	for(uint8_t index = 0; index < STEPPER_NUM_OF_MOTORS; index++)
+     d70:	84 30       	cpi	r24, 0x04	; 4
+     d72:	91 05       	cpc	r25, r1
+     d74:	01 f7       	brne	.-64     	; 0xd36 <stepper_fastest_and_init_motors+0x8>
+     d76:	80 e0       	ldi	r24, 0x00	; 0
+     d78:	90 e0       	ldi	r25, 0x00	; 0
+	fastest_speed = fastest_speed;
+	
+	for(uint8_t i = 0; i < STEPPER_ORDERS_TOTAL_NUMBER; i++)
+	{
+		stepper_motors_orders[i].barrier.value = 0;
+		stepper_motors_orders[i].direction = UNDEFINED;
+     d7a:	22 e0       	ldi	r18, 0x02	; 2
+	}
+	fastest_speed = fastest_speed;
+	
+	for(uint8_t i = 0; i < STEPPER_ORDERS_TOTAL_NUMBER; i++)
+	{
+		stepper_motors_orders[i].barrier.value = 0;
+     d7c:	fc 01       	movw	r30, r24
+     d7e:	ee 0f       	add	r30, r30
+     d80:	ff 1f       	adc	r31, r31
+     d82:	ee 0f       	add	r30, r30
+     d84:	ff 1f       	adc	r31, r31
+     d86:	ee 0f       	add	r30, r30
+     d88:	ff 1f       	adc	r31, r31
+     d8a:	e8 1b       	sub	r30, r24
+     d8c:	f9 0b       	sbc	r31, r25
+     d8e:	e1 5c       	subi	r30, 0xC1	; 193
+     d90:	fe 4f       	sbci	r31, 0xFE	; 254
+     d92:	15 82       	std	Z+5, r1	; 0x05
+		stepper_motors_orders[i].direction = UNDEFINED;
+     d94:	21 83       	std	Z+1, r18	; 0x01
+		stepper_motors_orders[i].customer_index = 0;
+     d96:	10 82       	st	Z, r1
+		stepper_motors_orders[i].move = 0;
+     d98:	13 82       	std	Z+3, r1	; 0x03
+     d9a:	12 82       	std	Z+2, r1	; 0x02
+		stepper_motors_orders[i].next = 0;
+     d9c:	16 82       	std	Z+6, r1	; 0x06
+     d9e:	01 96       	adiw	r24, 0x01	; 1
+		stepper_motors_table[index].orders_head = 0;
+		stepper_motors_table[index].timer = 0;
+	}
+	fastest_speed = fastest_speed;
+	
+	for(uint8_t i = 0; i < STEPPER_ORDERS_TOTAL_NUMBER; i++)
+     da0:	88 31       	cpi	r24, 0x18	; 24
+     da2:	91 05       	cpc	r25, r1
+     da4:	59 f7       	brne	.-42     	; 0xd7c <stepper_fastest_and_init_motors+0x4e>
+		stepper_motors_orders[i].direction = UNDEFINED;
+		stepper_motors_orders[i].customer_index = 0;
+		stepper_motors_orders[i].move = 0;
+		stepper_motors_orders[i].next = 0;
+	}
+}
+     da6:	08 95       	ret
+
+00000da8 <stepper_pop_front_order>:
+
+void stepper_pop_front_order(uint8_t index_arg)
+{
+     da8:	cf 93       	push	r28
+     daa:	df 93       	push	r29
+     dac:	1f 92       	push	r1
+     dae:	cd b7       	in	r28, 0x3d	; 61
+     db0:	de b7       	in	r29, 0x3e	; 62
+	volatile uint8_t temp = stepper_motors_table[index_arg].orders_head;
+     db2:	28 2f       	mov	r18, r24
+     db4:	30 e0       	ldi	r19, 0x00	; 0
+     db6:	9b e0       	ldi	r25, 0x0B	; 11
+     db8:	89 9f       	mul	r24, r25
+     dba:	f0 01       	movw	r30, r0
+     dbc:	11 24       	eor	r1, r1
+     dbe:	ea 50       	subi	r30, 0x0A	; 10
+     dc0:	fe 4f       	sbci	r31, 0xFE	; 254
+     dc2:	85 81       	ldd	r24, Z+5	; 0x05
+     dc4:	89 83       	std	Y+1, r24	; 0x01
+	stepper_motors_orders[temp].move = 0;
+     dc6:	e9 81       	ldd	r30, Y+1	; 0x01
+     dc8:	87 e0       	ldi	r24, 0x07	; 7
+     dca:	e8 9f       	mul	r30, r24
+     dcc:	f0 01       	movw	r30, r0
+     dce:	11 24       	eor	r1, r1
+     dd0:	e1 5c       	subi	r30, 0xC1	; 193
+     dd2:	fe 4f       	sbci	r31, 0xFE	; 254
+     dd4:	13 82       	std	Z+3, r1	; 0x03
+     dd6:	12 82       	std	Z+2, r1	; 0x02
+	stepper_motors_orders[temp].barrier.value = 0;
+     dd8:	e9 81       	ldd	r30, Y+1	; 0x01
+     dda:	97 e0       	ldi	r25, 0x07	; 7
+     ddc:	e9 9f       	mul	r30, r25
+     dde:	f0 01       	movw	r30, r0
+     de0:	11 24       	eor	r1, r1
+     de2:	e1 5c       	subi	r30, 0xC1	; 193
+     de4:	fe 4f       	sbci	r31, 0xFE	; 254
+     de6:	15 82       	std	Z+5, r1	; 0x05
+	stepper_motors_orders[temp].direction = UNDEFINED;
+     de8:	e9 81       	ldd	r30, Y+1	; 0x01
+     dea:	87 e0       	ldi	r24, 0x07	; 7
+     dec:	e8 9f       	mul	r30, r24
+     dee:	f0 01       	movw	r30, r0
+     df0:	11 24       	eor	r1, r1
+     df2:	e1 5c       	subi	r30, 0xC1	; 193
+     df4:	fe 4f       	sbci	r31, 0xFE	; 254
+     df6:	82 e0       	ldi	r24, 0x02	; 2
+     df8:	81 83       	std	Z+1, r24	; 0x01
+	if(temp != 0)
+     dfa:	89 81       	ldd	r24, Y+1	; 0x01
+     dfc:	88 23       	and	r24, r24
+     dfe:	09 f4       	brne	.+2      	; 0xe02 <stepper_pop_front_order+0x5a>
+     e00:	6e c0       	rjmp	.+220    	; 0xede <stepper_pop_front_order+0x136>
+	{
+		stepper_motors_table[index_arg].speed = 0xFF;
+     e02:	8b e0       	ldi	r24, 0x0B	; 11
+     e04:	82 9f       	mul	r24, r18
+     e06:	f0 01       	movw	r30, r0
+     e08:	83 9f       	mul	r24, r19
+     e0a:	f0 0d       	add	r31, r0
+     e0c:	11 24       	eor	r1, r1
+     e0e:	ea 50       	subi	r30, 0x0A	; 10
+     e10:	fe 4f       	sbci	r31, 0xFE	; 254
+     e12:	8f ef       	ldi	r24, 0xFF	; 255
+     e14:	84 83       	std	Z+4, r24	; 0x04
+		if(stepper_motors_orders[temp].next != 0)
+     e16:	e9 81       	ldd	r30, Y+1	; 0x01
+     e18:	97 e0       	ldi	r25, 0x07	; 7
+     e1a:	e9 9f       	mul	r30, r25
+     e1c:	f0 01       	movw	r30, r0
+     e1e:	11 24       	eor	r1, r1
+     e20:	e1 5c       	subi	r30, 0xC1	; 193
+     e22:	fe 4f       	sbci	r31, 0xFE	; 254
+     e24:	86 81       	ldd	r24, Z+6	; 0x06
+     e26:	88 23       	and	r24, r24
+     e28:	29 f1       	breq	.+74     	; 0xe74 <stepper_pop_front_order+0xcc>
+		{
+			if(stepper_motors_orders[stepper_motors_orders[temp].next].direction == CLOCKWISE)
+     e2a:	e9 81       	ldd	r30, Y+1	; 0x01
+     e2c:	87 e0       	ldi	r24, 0x07	; 7
+     e2e:	e8 9f       	mul	r30, r24
+     e30:	f0 01       	movw	r30, r0
+     e32:	11 24       	eor	r1, r1
+     e34:	e1 5c       	subi	r30, 0xC1	; 193
+     e36:	fe 4f       	sbci	r31, 0xFE	; 254
+     e38:	e6 81       	ldd	r30, Z+6	; 0x06
+     e3a:	97 e0       	ldi	r25, 0x07	; 7
+     e3c:	e9 9f       	mul	r30, r25
+     e3e:	f0 01       	movw	r30, r0
+     e40:	11 24       	eor	r1, r1
+     e42:	e1 5c       	subi	r30, 0xC1	; 193
+     e44:	fe 4f       	sbci	r31, 0xFE	; 254
+     e46:	81 81       	ldd	r24, Z+1	; 0x01
+     e48:	81 11       	cpse	r24, r1
+     e4a:	0a c0       	rjmp	.+20     	; 0xe60 <stepper_pop_front_order+0xb8>
+				stepper_motors_table[index_arg].mode = PHASE_A;
+     e4c:	8b e0       	ldi	r24, 0x0B	; 11
+     e4e:	82 9f       	mul	r24, r18
+     e50:	f0 01       	movw	r30, r0
+     e52:	83 9f       	mul	r24, r19
+     e54:	f0 0d       	add	r31, r0
+     e56:	11 24       	eor	r1, r1
+     e58:	ea 50       	subi	r30, 0x0A	; 10
+     e5a:	fe 4f       	sbci	r31, 0xFE	; 254
+     e5c:	11 86       	std	Z+9, r1	; 0x09
+     e5e:	0a c0       	rjmp	.+20     	; 0xe74 <stepper_pop_front_order+0xcc>
+			else
+				stepper_motors_table[index_arg].mode = PHASE_D;
+     e60:	8b e0       	ldi	r24, 0x0B	; 11
+     e62:	82 9f       	mul	r24, r18
+     e64:	f0 01       	movw	r30, r0
+     e66:	83 9f       	mul	r24, r19
+     e68:	f0 0d       	add	r31, r0
+     e6a:	11 24       	eor	r1, r1
+     e6c:	ea 50       	subi	r30, 0x0A	; 10
+     e6e:	fe 4f       	sbci	r31, 0xFE	; 254
+     e70:	83 e0       	ldi	r24, 0x03	; 3
+     e72:	81 87       	std	Z+9, r24	; 0x09
+		}
+		
+		stepper_motors_table[index_arg].step = 0;	
+     e74:	8b e0       	ldi	r24, 0x0B	; 11
+     e76:	82 9f       	mul	r24, r18
+     e78:	f0 01       	movw	r30, r0
+     e7a:	83 9f       	mul	r24, r19
+     e7c:	f0 0d       	add	r31, r0
+     e7e:	11 24       	eor	r1, r1
+     e80:	ea 50       	subi	r30, 0x0A	; 10
+     e82:	fe 4f       	sbci	r31, 0xFE	; 254
+     e84:	10 86       	std	Z+8, r1	; 0x08
+     e86:	17 82       	std	Z+7, r1	; 0x07
+		stepper_motors_table[index_arg].timer = 0;
+     e88:	16 82       	std	Z+6, r1	; 0x06
+		stepper_motors_table[index_arg].orders_head = stepper_motors_orders[temp].next;
+     e8a:	a9 81       	ldd	r26, Y+1	; 0x01
+     e8c:	87 e0       	ldi	r24, 0x07	; 7
+     e8e:	a8 9f       	mul	r26, r24
+     e90:	d0 01       	movw	r26, r0
+     e92:	11 24       	eor	r1, r1
+     e94:	a1 5c       	subi	r26, 0xC1	; 193
+     e96:	be 4f       	sbci	r27, 0xFE	; 254
+     e98:	16 96       	adiw	r26, 0x06	; 6
+     e9a:	8c 91       	ld	r24, X
+     e9c:	85 83       	std	Z+5, r24	; 0x05
+		
+		if(stepper_motors_table[index_arg].placement == MSB) //port sequence after last order - no need to take power and heat engines
+     e9e:	83 81       	ldd	r24, Z+3	; 0x03
+     ea0:	81 11       	cpse	r24, r1
+     ea2:	0f c0       	rjmp	.+30     	; 0xec2 <stepper_pop_front_order+0x11a>
+		{
+			*stepper_motors_table[index_arg].port &= ~(0xF0);
+     ea4:	8b e0       	ldi	r24, 0x0B	; 11
+     ea6:	82 9f       	mul	r24, r18
+     ea8:	f0 01       	movw	r30, r0
+     eaa:	83 9f       	mul	r24, r19
+     eac:	f0 0d       	add	r31, r0
+     eae:	11 24       	eor	r1, r1
+     eb0:	ea 50       	subi	r30, 0x0A	; 10
+     eb2:	fe 4f       	sbci	r31, 0xFE	; 254
+     eb4:	01 80       	ldd	r0, Z+1	; 0x01
+     eb6:	f2 81       	ldd	r31, Z+2	; 0x02
+     eb8:	e0 2d       	mov	r30, r0
+     eba:	80 81       	ld	r24, Z
+     ebc:	8f 70       	andi	r24, 0x0F	; 15
+     ebe:	80 83       	st	Z, r24
+     ec0:	0e c0       	rjmp	.+28     	; 0xede <stepper_pop_front_order+0x136>
+		}else
+			{
+				*stepper_motors_table[index_arg].port &= ~(0xF);
+     ec2:	8b e0       	ldi	r24, 0x0B	; 11
+     ec4:	82 9f       	mul	r24, r18
+     ec6:	f0 01       	movw	r30, r0
+     ec8:	83 9f       	mul	r24, r19
+     eca:	f0 0d       	add	r31, r0
+     ecc:	11 24       	eor	r1, r1
+     ece:	ea 50       	subi	r30, 0x0A	; 10
+     ed0:	fe 4f       	sbci	r31, 0xFE	; 254
+     ed2:	01 80       	ldd	r0, Z+1	; 0x01
+     ed4:	f2 81       	ldd	r31, Z+2	; 0x02
+     ed6:	e0 2d       	mov	r30, r0
+     ed8:	80 81       	ld	r24, Z
+     eda:	80 7f       	andi	r24, 0xF0	; 240
+     edc:	80 83       	st	Z, r24
+			}  
+	}
+}
+     ede:	0f 90       	pop	r0
+     ee0:	df 91       	pop	r29
+     ee2:	cf 91       	pop	r28
+     ee4:	08 95       	ret
+
+00000ee6 <stepper_process_motor>:
+			servo_process_servo(index);
+		}
+	}
+}
+void stepper_process_motor(uint8_t index_arg)
+{
+     ee6:	cf 92       	push	r12
+     ee8:	df 92       	push	r13
+     eea:	ef 92       	push	r14
+     eec:	ff 92       	push	r15
+     eee:	0f 93       	push	r16
+     ef0:	1f 93       	push	r17
+     ef2:	cf 93       	push	r28
+     ef4:	df 93       	push	r29
+	uint8_t stepper_a, stepper_b, stepper_c, stepper_d;
+	if(stepper_motors_table[index_arg].placement == MSB)
+     ef6:	c8 2f       	mov	r28, r24
+     ef8:	d0 e0       	ldi	r29, 0x00	; 0
+     efa:	0b e0       	ldi	r16, 0x0B	; 11
+     efc:	80 9f       	mul	r24, r16
+     efe:	f0 01       	movw	r30, r0
+     f00:	11 24       	eor	r1, r1
+     f02:	ea 50       	subi	r30, 0x0A	; 10
+     f04:	fe 4f       	sbci	r31, 0xFE	; 254
+     f06:	93 81       	ldd	r25, Z+3	; 0x03
+     f08:	99 23       	and	r25, r25
+     f0a:	29 f0       	breq	.+10     	; 0xf16 <stepper_process_motor+0x30>
+	}else
+		{
+			stepper_a = 0;
+			stepper_b = 1;
+			stepper_c = 2;
+			stepper_d = 3;
+     f0c:	93 e0       	ldi	r25, 0x03	; 3
+		stepper_d = 7;
+	}else
+		{
+			stepper_a = 0;
+			stepper_b = 1;
+			stepper_c = 2;
+     f0e:	62 e0       	ldi	r22, 0x02	; 2
+		stepper_c = 6;
+		stepper_d = 7;
+	}else
+		{
+			stepper_a = 0;
+			stepper_b = 1;
+     f10:	a1 e0       	ldi	r26, 0x01	; 1
+		stepper_b = 5;
+		stepper_c = 6;
+		stepper_d = 7;
+	}else
+		{
+			stepper_a = 0;
+     f12:	70 e0       	ldi	r23, 0x00	; 0
+     f14:	04 c0       	rjmp	.+8      	; 0xf1e <stepper_process_motor+0x38>
+	if(stepper_motors_table[index_arg].placement == MSB)
+	{
+		stepper_a = 4;
+		stepper_b = 5;
+		stepper_c = 6;
+		stepper_d = 7;
+     f16:	97 e0       	ldi	r25, 0x07	; 7
+	uint8_t stepper_a, stepper_b, stepper_c, stepper_d;
+	if(stepper_motors_table[index_arg].placement == MSB)
+	{
+		stepper_a = 4;
+		stepper_b = 5;
+		stepper_c = 6;
+     f18:	66 e0       	ldi	r22, 0x06	; 6
+{
+	uint8_t stepper_a, stepper_b, stepper_c, stepper_d;
+	if(stepper_motors_table[index_arg].placement == MSB)
+	{
+		stepper_a = 4;
+		stepper_b = 5;
+     f1a:	a5 e0       	ldi	r26, 0x05	; 5
+void stepper_process_motor(uint8_t index_arg)
+{
+	uint8_t stepper_a, stepper_b, stepper_c, stepper_d;
+	if(stepper_motors_table[index_arg].placement == MSB)
+	{
+		stepper_a = 4;
+     f1c:	74 e0       	ldi	r23, 0x04	; 4
+			stepper_b = 1;
+			stepper_c = 2;
+			stepper_d = 3;
+		}
+	
+	switch(stepper_motors_table[index_arg].mode)
+     f1e:	2b e0       	ldi	r18, 0x0B	; 11
+     f20:	2c 9f       	mul	r18, r28
+     f22:	f0 01       	movw	r30, r0
+     f24:	2d 9f       	mul	r18, r29
+     f26:	f0 0d       	add	r31, r0
+     f28:	11 24       	eor	r1, r1
+     f2a:	ea 50       	subi	r30, 0x0A	; 10
+     f2c:	fe 4f       	sbci	r31, 0xFE	; 254
+     f2e:	21 85       	ldd	r18, Z+9	; 0x09
+     f30:	21 30       	cpi	r18, 0x01	; 1
+     f32:	91 f1       	breq	.+100    	; 0xf98 <stepper_process_motor+0xb2>
+     f34:	38 f0       	brcs	.+14     	; 0xf44 <stepper_process_motor+0x5e>
+     f36:	22 30       	cpi	r18, 0x02	; 2
+     f38:	09 f4       	brne	.+2      	; 0xf3c <stepper_process_motor+0x56>
+     f3a:	58 c0       	rjmp	.+176    	; 0xfec <stepper_process_motor+0x106>
+     f3c:	23 30       	cpi	r18, 0x03	; 3
+     f3e:	09 f4       	brne	.+2      	; 0xf42 <stepper_process_motor+0x5c>
+     f40:	7f c0       	rjmp	.+254    	; 0x1040 <stepper_process_motor+0x15a>
+     f42:	a7 c0       	rjmp	.+334    	; 0x1092 <stepper_process_motor+0x1ac>
+	{
+		case PHASE_A:
+		*stepper_motors_table[index_arg].port &= ~(1<<stepper_c);
+     f44:	2b e0       	ldi	r18, 0x0B	; 11
+     f46:	2c 9f       	mul	r18, r28
+     f48:	f0 01       	movw	r30, r0
+     f4a:	2d 9f       	mul	r18, r29
+     f4c:	f0 0d       	add	r31, r0
+     f4e:	11 24       	eor	r1, r1
+     f50:	9f 01       	movw	r18, r30
+     f52:	2a 50       	subi	r18, 0x0A	; 10
+     f54:	3e 4f       	sbci	r19, 0xFE	; 254
+     f56:	69 01       	movw	r12, r18
+     f58:	f9 01       	movw	r30, r18
+     f5a:	e1 80       	ldd	r14, Z+1	; 0x01
+     f5c:	f2 80       	ldd	r15, Z+2	; 0x02
+     f5e:	f7 01       	movw	r30, r14
+     f60:	50 81       	ld	r21, Z
+     f62:	21 e0       	ldi	r18, 0x01	; 1
+     f64:	30 e0       	ldi	r19, 0x00	; 0
+     f66:	89 01       	movw	r16, r18
+     f68:	06 2e       	mov	r0, r22
+     f6a:	02 c0       	rjmp	.+4      	; 0xf70 <stepper_process_motor+0x8a>
+     f6c:	00 0f       	add	r16, r16
+     f6e:	11 1f       	adc	r17, r17
+     f70:	0a 94       	dec	r0
+     f72:	e2 f7       	brpl	.-8      	; 0xf6c <stepper_process_motor+0x86>
+     f74:	40 2f       	mov	r20, r16
+     f76:	40 95       	com	r20
+     f78:	45 23       	and	r20, r21
+     f7a:	40 83       	st	Z, r20
+		*stepper_motors_table[index_arg].port |= (1<<stepper_a);
+     f7c:	f6 01       	movw	r30, r12
+     f7e:	01 81       	ldd	r16, Z+1	; 0x01
+     f80:	12 81       	ldd	r17, Z+2	; 0x02
+     f82:	f8 01       	movw	r30, r16
+     f84:	40 81       	ld	r20, Z
+     f86:	07 2e       	mov	r0, r23
+     f88:	02 c0       	rjmp	.+4      	; 0xf8e <stepper_process_motor+0xa8>
+     f8a:	22 0f       	add	r18, r18
+     f8c:	33 1f       	adc	r19, r19
+     f8e:	0a 94       	dec	r0
+     f90:	e2 f7       	brpl	.-8      	; 0xf8a <stepper_process_motor+0xa4>
+     f92:	24 2b       	or	r18, r20
+     f94:	20 83       	st	Z, r18
+		break;
+     f96:	7d c0       	rjmp	.+250    	; 0x1092 <stepper_process_motor+0x1ac>
+		
+		case PHASE_B:
+		*stepper_motors_table[index_arg].port &= ~(1<<stepper_d);
+     f98:	2b e0       	ldi	r18, 0x0B	; 11
+     f9a:	2c 9f       	mul	r18, r28
+     f9c:	f0 01       	movw	r30, r0
+     f9e:	2d 9f       	mul	r18, r29
+     fa0:	f0 0d       	add	r31, r0
+     fa2:	11 24       	eor	r1, r1
+     fa4:	8f 01       	movw	r16, r30
+     fa6:	0a 50       	subi	r16, 0x0A	; 10
+     fa8:	1e 4f       	sbci	r17, 0xFE	; 254
+     faa:	68 01       	movw	r12, r16
+     fac:	f8 01       	movw	r30, r16
+     fae:	e1 80       	ldd	r14, Z+1	; 0x01
+     fb0:	f2 80       	ldd	r15, Z+2	; 0x02
+     fb2:	f7 01       	movw	r30, r14
+     fb4:	50 81       	ld	r21, Z
+     fb6:	21 e0       	ldi	r18, 0x01	; 1
+     fb8:	30 e0       	ldi	r19, 0x00	; 0
+     fba:	89 01       	movw	r16, r18
+     fbc:	09 2e       	mov	r0, r25
+     fbe:	02 c0       	rjmp	.+4      	; 0xfc4 <stepper_process_motor+0xde>
+     fc0:	00 0f       	add	r16, r16
+     fc2:	11 1f       	adc	r17, r17
+     fc4:	0a 94       	dec	r0
+     fc6:	e2 f7       	brpl	.-8      	; 0xfc0 <stepper_process_motor+0xda>
+     fc8:	40 2f       	mov	r20, r16
+     fca:	40 95       	com	r20
+     fcc:	45 23       	and	r20, r21
+     fce:	40 83       	st	Z, r20
+		*stepper_motors_table[index_arg].port |= (1<<stepper_b);
+     fd0:	f6 01       	movw	r30, r12
+     fd2:	01 81       	ldd	r16, Z+1	; 0x01
+     fd4:	12 81       	ldd	r17, Z+2	; 0x02
+     fd6:	f8 01       	movw	r30, r16
+     fd8:	40 81       	ld	r20, Z
+     fda:	0a 2e       	mov	r0, r26
+     fdc:	02 c0       	rjmp	.+4      	; 0xfe2 <stepper_process_motor+0xfc>
+     fde:	22 0f       	add	r18, r18
+     fe0:	33 1f       	adc	r19, r19
+     fe2:	0a 94       	dec	r0
+     fe4:	e2 f7       	brpl	.-8      	; 0xfde <stepper_process_motor+0xf8>
+     fe6:	24 2b       	or	r18, r20
+     fe8:	20 83       	st	Z, r18
+		break;
+     fea:	53 c0       	rjmp	.+166    	; 0x1092 <stepper_process_motor+0x1ac>
+		
+		case PHASE_C:
+		*stepper_motors_table[index_arg].port &= ~(1<<stepper_a);
+     fec:	2b e0       	ldi	r18, 0x0B	; 11
+     fee:	2c 9f       	mul	r18, r28
+     ff0:	f0 01       	movw	r30, r0
+     ff2:	2d 9f       	mul	r18, r29
+     ff4:	f0 0d       	add	r31, r0
+     ff6:	11 24       	eor	r1, r1
+     ff8:	8f 01       	movw	r16, r30
+     ffa:	0a 50       	subi	r16, 0x0A	; 10
+     ffc:	1e 4f       	sbci	r17, 0xFE	; 254
+     ffe:	68 01       	movw	r12, r16
+    1000:	f8 01       	movw	r30, r16
+    1002:	e1 80       	ldd	r14, Z+1	; 0x01
+    1004:	f2 80       	ldd	r15, Z+2	; 0x02
+    1006:	f7 01       	movw	r30, r14
+    1008:	50 81       	ld	r21, Z
+    100a:	21 e0       	ldi	r18, 0x01	; 1
+    100c:	30 e0       	ldi	r19, 0x00	; 0
+    100e:	89 01       	movw	r16, r18
+    1010:	07 2e       	mov	r0, r23
+    1012:	02 c0       	rjmp	.+4      	; 0x1018 <stepper_process_motor+0x132>
+    1014:	00 0f       	add	r16, r16
+    1016:	11 1f       	adc	r17, r17
+    1018:	0a 94       	dec	r0
+    101a:	e2 f7       	brpl	.-8      	; 0x1014 <stepper_process_motor+0x12e>
+    101c:	40 2f       	mov	r20, r16
+    101e:	40 95       	com	r20
+    1020:	45 23       	and	r20, r21
+    1022:	40 83       	st	Z, r20
+		*stepper_motors_table[index_arg].port |= (1<<stepper_c);
+    1024:	f6 01       	movw	r30, r12
+    1026:	01 81       	ldd	r16, Z+1	; 0x01
+    1028:	12 81       	ldd	r17, Z+2	; 0x02
+    102a:	f8 01       	movw	r30, r16
+    102c:	40 81       	ld	r20, Z
+    102e:	06 2e       	mov	r0, r22
+    1030:	02 c0       	rjmp	.+4      	; 0x1036 <stepper_process_motor+0x150>
+    1032:	22 0f       	add	r18, r18
+    1034:	33 1f       	adc	r19, r19
+    1036:	0a 94       	dec	r0
+    1038:	e2 f7       	brpl	.-8      	; 0x1032 <stepper_process_motor+0x14c>
+    103a:	24 2b       	or	r18, r20
+    103c:	20 83       	st	Z, r18
+		break;
+    103e:	29 c0       	rjmp	.+82     	; 0x1092 <stepper_process_motor+0x1ac>
+		
+		case PHASE_D:
+		*stepper_motors_table[index_arg].port &= ~(1<<stepper_b);
+    1040:	2b e0       	ldi	r18, 0x0B	; 11
+    1042:	2c 9f       	mul	r18, r28
+    1044:	f0 01       	movw	r30, r0
+    1046:	2d 9f       	mul	r18, r29
+    1048:	f0 0d       	add	r31, r0
+    104a:	11 24       	eor	r1, r1
+    104c:	8f 01       	movw	r16, r30
+    104e:	0a 50       	subi	r16, 0x0A	; 10
+    1050:	1e 4f       	sbci	r17, 0xFE	; 254
+    1052:	68 01       	movw	r12, r16
+    1054:	f8 01       	movw	r30, r16
+    1056:	e1 80       	ldd	r14, Z+1	; 0x01
+    1058:	f2 80       	ldd	r15, Z+2	; 0x02
+    105a:	f7 01       	movw	r30, r14
+    105c:	50 81       	ld	r21, Z
+    105e:	21 e0       	ldi	r18, 0x01	; 1
+    1060:	30 e0       	ldi	r19, 0x00	; 0
+    1062:	89 01       	movw	r16, r18
+    1064:	0a 2e       	mov	r0, r26
+    1066:	02 c0       	rjmp	.+4      	; 0x106c <stepper_process_motor+0x186>
+    1068:	00 0f       	add	r16, r16
+    106a:	11 1f       	adc	r17, r17
+    106c:	0a 94       	dec	r0
+    106e:	e2 f7       	brpl	.-8      	; 0x1068 <stepper_process_motor+0x182>
+    1070:	40 2f       	mov	r20, r16
+    1072:	40 95       	com	r20
+    1074:	45 23       	and	r20, r21
+    1076:	40 83       	st	Z, r20
+		*stepper_motors_table[index_arg].port |= (1<<stepper_d);
+    1078:	f6 01       	movw	r30, r12
+    107a:	01 81       	ldd	r16, Z+1	; 0x01
+    107c:	12 81       	ldd	r17, Z+2	; 0x02
+    107e:	f8 01       	movw	r30, r16
+    1080:	40 81       	ld	r20, Z
+    1082:	09 2e       	mov	r0, r25
+    1084:	02 c0       	rjmp	.+4      	; 0x108a <stepper_process_motor+0x1a4>
+    1086:	22 0f       	add	r18, r18
+    1088:	33 1f       	adc	r19, r19
+    108a:	0a 94       	dec	r0
+    108c:	e2 f7       	brpl	.-8      	; 0x1086 <stepper_process_motor+0x1a0>
+    108e:	24 2b       	or	r18, r20
+    1090:	20 83       	st	Z, r18
+		break;
+		
+		default: break;
+	}
+	
+	if(stepper_motors_orders[stepper_motors_table[index_arg].orders_head].direction == CLOCKWISE) //this double if is just mode movement
+    1092:	2b e0       	ldi	r18, 0x0B	; 11
+    1094:	2c 9f       	mul	r18, r28
+    1096:	f0 01       	movw	r30, r0
+    1098:	2d 9f       	mul	r18, r29
+    109a:	f0 0d       	add	r31, r0
+    109c:	11 24       	eor	r1, r1
+    109e:	ea 50       	subi	r30, 0x0A	; 10
+    10a0:	fe 4f       	sbci	r31, 0xFE	; 254
+    10a2:	e5 81       	ldd	r30, Z+5	; 0x05
+    10a4:	07 e0       	ldi	r16, 0x07	; 7
+    10a6:	e0 9f       	mul	r30, r16
+    10a8:	f0 01       	movw	r30, r0
+    10aa:	11 24       	eor	r1, r1
+    10ac:	e1 5c       	subi	r30, 0xC1	; 193
+    10ae:	fe 4f       	sbci	r31, 0xFE	; 254
+    10b0:	21 81       	ldd	r18, Z+1	; 0x01
+    10b2:	21 11       	cpse	r18, r1
+    10b4:	21 c0       	rjmp	.+66     	; 0x10f8 <stepper_process_motor+0x212>
+	{
+		if(stepper_motors_table[index_arg].mode == PHASE_D) 
+    10b6:	2b e0       	ldi	r18, 0x0B	; 11
+    10b8:	2c 9f       	mul	r18, r28
+    10ba:	f0 01       	movw	r30, r0
+    10bc:	2d 9f       	mul	r18, r29
+    10be:	f0 0d       	add	r31, r0
+    10c0:	11 24       	eor	r1, r1
+    10c2:	ea 50       	subi	r30, 0x0A	; 10
+    10c4:	fe 4f       	sbci	r31, 0xFE	; 254
+    10c6:	21 85       	ldd	r18, Z+9	; 0x09
+    10c8:	23 30       	cpi	r18, 0x03	; 3
+    10ca:	51 f4       	brne	.+20     	; 0x10e0 <stepper_process_motor+0x1fa>
+		{
+			stepper_motors_table[index_arg].mode = PHASE_A;
+    10cc:	2b e0       	ldi	r18, 0x0B	; 11
+    10ce:	2c 9f       	mul	r18, r28
+    10d0:	f0 01       	movw	r30, r0
+    10d2:	2d 9f       	mul	r18, r29
+    10d4:	f0 0d       	add	r31, r0
+    10d6:	11 24       	eor	r1, r1
+    10d8:	ea 50       	subi	r30, 0x0A	; 10
+    10da:	fe 4f       	sbci	r31, 0xFE	; 254
+    10dc:	11 86       	std	Z+9, r1	; 0x09
+    10de:	3f c0       	rjmp	.+126    	; 0x115e <stepper_process_motor+0x278>
+		}
+		else 
+			stepper_motors_table[index_arg].mode++;
+    10e0:	2b e0       	ldi	r18, 0x0B	; 11
+    10e2:	2c 9f       	mul	r18, r28
+    10e4:	f0 01       	movw	r30, r0
+    10e6:	2d 9f       	mul	r18, r29
+    10e8:	f0 0d       	add	r31, r0
+    10ea:	11 24       	eor	r1, r1
+    10ec:	ea 50       	subi	r30, 0x0A	; 10
+    10ee:	fe 4f       	sbci	r31, 0xFE	; 254
+    10f0:	21 85       	ldd	r18, Z+9	; 0x09
+    10f2:	2f 5f       	subi	r18, 0xFF	; 255
+    10f4:	21 87       	std	Z+9, r18	; 0x09
+    10f6:	33 c0       	rjmp	.+102    	; 0x115e <stepper_process_motor+0x278>
+	}else
+		if(stepper_motors_orders[stepper_motors_table[index_arg].orders_head].direction == COUNTERCLOCKWISE)
+    10f8:	2b e0       	ldi	r18, 0x0B	; 11
+    10fa:	2c 9f       	mul	r18, r28
+    10fc:	f0 01       	movw	r30, r0
+    10fe:	2d 9f       	mul	r18, r29
+    1100:	f0 0d       	add	r31, r0
+    1102:	11 24       	eor	r1, r1
+    1104:	ea 50       	subi	r30, 0x0A	; 10
+    1106:	fe 4f       	sbci	r31, 0xFE	; 254
+    1108:	e5 81       	ldd	r30, Z+5	; 0x05
+    110a:	17 e0       	ldi	r17, 0x07	; 7
+    110c:	e1 9f       	mul	r30, r17
+    110e:	f0 01       	movw	r30, r0
+    1110:	11 24       	eor	r1, r1
+    1112:	e1 5c       	subi	r30, 0xC1	; 193
+    1114:	fe 4f       	sbci	r31, 0xFE	; 254
+    1116:	21 81       	ldd	r18, Z+1	; 0x01
+    1118:	21 30       	cpi	r18, 0x01	; 1
+    111a:	09 f5       	brne	.+66     	; 0x115e <stepper_process_motor+0x278>
+		{
+			if(stepper_motors_table[index_arg].mode == PHASE_A)
+    111c:	2b e0       	ldi	r18, 0x0B	; 11
+    111e:	2c 9f       	mul	r18, r28
+    1120:	f0 01       	movw	r30, r0
+    1122:	2d 9f       	mul	r18, r29
+    1124:	f0 0d       	add	r31, r0
+    1126:	11 24       	eor	r1, r1
+    1128:	ea 50       	subi	r30, 0x0A	; 10
+    112a:	fe 4f       	sbci	r31, 0xFE	; 254
+    112c:	21 85       	ldd	r18, Z+9	; 0x09
+    112e:	21 11       	cpse	r18, r1
+    1130:	0b c0       	rjmp	.+22     	; 0x1148 <stepper_process_motor+0x262>
+			{
+				stepper_motors_table[index_arg].mode = PHASE_D;
+    1132:	2b e0       	ldi	r18, 0x0B	; 11
+    1134:	2c 9f       	mul	r18, r28
+    1136:	f0 01       	movw	r30, r0
+    1138:	2d 9f       	mul	r18, r29
+    113a:	f0 0d       	add	r31, r0
+    113c:	11 24       	eor	r1, r1
+    113e:	ea 50       	subi	r30, 0x0A	; 10
+    1140:	fe 4f       	sbci	r31, 0xFE	; 254
+    1142:	23 e0       	ldi	r18, 0x03	; 3
+    1144:	21 87       	std	Z+9, r18	; 0x09
+    1146:	0b c0       	rjmp	.+22     	; 0x115e <stepper_process_motor+0x278>
+			}
+			else
+				stepper_motors_table[index_arg].mode--;
+    1148:	2b e0       	ldi	r18, 0x0B	; 11
+    114a:	2c 9f       	mul	r18, r28
+    114c:	f0 01       	movw	r30, r0
+    114e:	2d 9f       	mul	r18, r29
+    1150:	f0 0d       	add	r31, r0
+    1152:	11 24       	eor	r1, r1
+    1154:	ea 50       	subi	r30, 0x0A	; 10
+    1156:	fe 4f       	sbci	r31, 0xFE	; 254
+    1158:	21 85       	ldd	r18, Z+9	; 0x09
+    115a:	21 50       	subi	r18, 0x01	; 1
+    115c:	21 87       	std	Z+9, r18	; 0x09
+		}
+	if(stepper_motors_table[index_arg].step == (stepper_motors_orders[stepper_motors_table[index_arg].orders_head].move+4)) //to doo
+    115e:	2b e0       	ldi	r18, 0x0B	; 11
+    1160:	2c 9f       	mul	r18, r28
+    1162:	f0 01       	movw	r30, r0
+    1164:	2d 9f       	mul	r18, r29
+    1166:	f0 0d       	add	r31, r0
+    1168:	11 24       	eor	r1, r1
+    116a:	ea 50       	subi	r30, 0x0A	; 10
+    116c:	fe 4f       	sbci	r31, 0xFE	; 254
+    116e:	47 81       	ldd	r20, Z+7	; 0x07
+    1170:	50 85       	ldd	r21, Z+8	; 0x08
+    1172:	e5 81       	ldd	r30, Z+5	; 0x05
+    1174:	27 e0       	ldi	r18, 0x07	; 7
+    1176:	e2 9f       	mul	r30, r18
+    1178:	f0 01       	movw	r30, r0
+    117a:	11 24       	eor	r1, r1
+    117c:	e1 5c       	subi	r30, 0xC1	; 193
+    117e:	fe 4f       	sbci	r31, 0xFE	; 254
+    1180:	22 81       	ldd	r18, Z+2	; 0x02
+    1182:	33 81       	ldd	r19, Z+3	; 0x03
+    1184:	2c 5f       	subi	r18, 0xFC	; 252
+    1186:	3f 4f       	sbci	r19, 0xFF	; 255
+    1188:	42 17       	cp	r20, r18
+    118a:	53 07       	cpc	r21, r19
+    118c:	79 f5       	brne	.+94     	; 0x11ec <stepper_process_motor+0x306>
+	{
+		*stepper_motors_table[index_arg].port &= ~((1<<stepper_a)|(1<<stepper_b)|(1<<stepper_c)|(1<<stepper_d)); //must be here because of a-d shortcuts
+    118e:	2b e0       	ldi	r18, 0x0B	; 11
+    1190:	2c 9f       	mul	r18, r28
+    1192:	f0 01       	movw	r30, r0
+    1194:	2d 9f       	mul	r18, r29
+    1196:	f0 0d       	add	r31, r0
+    1198:	11 24       	eor	r1, r1
+    119a:	ea 50       	subi	r30, 0x0A	; 10
+    119c:	fe 4f       	sbci	r31, 0xFE	; 254
+    119e:	01 80       	ldd	r0, Z+1	; 0x01
+    11a0:	f2 81       	ldd	r31, Z+2	; 0x02
+    11a2:	e0 2d       	mov	r30, r0
+    11a4:	40 81       	ld	r20, Z
+    11a6:	21 e0       	ldi	r18, 0x01	; 1
+    11a8:	30 e0       	ldi	r19, 0x00	; 0
+    11aa:	89 01       	movw	r16, r18
+    11ac:	02 c0       	rjmp	.+4      	; 0x11b2 <stepper_process_motor+0x2cc>
+    11ae:	00 0f       	add	r16, r16
+    11b0:	11 1f       	adc	r17, r17
+    11b2:	aa 95       	dec	r26
+    11b4:	e2 f7       	brpl	.-8      	; 0x11ae <stepper_process_motor+0x2c8>
+    11b6:	d9 01       	movw	r26, r18
+    11b8:	02 c0       	rjmp	.+4      	; 0x11be <stepper_process_motor+0x2d8>
+    11ba:	aa 0f       	add	r26, r26
+    11bc:	bb 1f       	adc	r27, r27
+    11be:	7a 95       	dec	r23
+    11c0:	e2 f7       	brpl	.-8      	; 0x11ba <stepper_process_motor+0x2d4>
+    11c2:	a0 2b       	or	r26, r16
+    11c4:	89 01       	movw	r16, r18
+    11c6:	02 c0       	rjmp	.+4      	; 0x11cc <stepper_process_motor+0x2e6>
+    11c8:	00 0f       	add	r16, r16
+    11ca:	11 1f       	adc	r17, r17
+    11cc:	6a 95       	dec	r22
+    11ce:	e2 f7       	brpl	.-8      	; 0x11c8 <stepper_process_motor+0x2e2>
+    11d0:	b8 01       	movw	r22, r16
+    11d2:	6a 2b       	or	r22, r26
+    11d4:	02 c0       	rjmp	.+4      	; 0x11da <stepper_process_motor+0x2f4>
+    11d6:	22 0f       	add	r18, r18
+    11d8:	33 1f       	adc	r19, r19
+    11da:	9a 95       	dec	r25
+    11dc:	e2 f7       	brpl	.-8      	; 0x11d6 <stepper_process_motor+0x2f0>
+    11de:	26 2b       	or	r18, r22
+    11e0:	20 95       	com	r18
+    11e2:	24 23       	and	r18, r20
+    11e4:	20 83       	st	Z, r18
+		stepper_pop_front_order(index_arg);
+    11e6:	0e 94 d4 06 	call	0xda8	; 0xda8 <stepper_pop_front_order>
+    11ea:	21 c0       	rjmp	.+66     	; 0x122e <stepper_process_motor+0x348>
+
+	}else
+		if(stepper_motors_orders[stepper_motors_table[index_arg].orders_head].move <= 65531)
+    11ec:	8b e0       	ldi	r24, 0x0B	; 11
+    11ee:	8c 9f       	mul	r24, r28
+    11f0:	f0 01       	movw	r30, r0
+    11f2:	8d 9f       	mul	r24, r29
+    11f4:	f0 0d       	add	r31, r0
+    11f6:	11 24       	eor	r1, r1
+    11f8:	ea 50       	subi	r30, 0x0A	; 10
+    11fa:	fe 4f       	sbci	r31, 0xFE	; 254
+    11fc:	e5 81       	ldd	r30, Z+5	; 0x05
+    11fe:	17 e0       	ldi	r17, 0x07	; 7
+    1200:	e1 9f       	mul	r30, r17
+    1202:	f0 01       	movw	r30, r0
+    1204:	11 24       	eor	r1, r1
+    1206:	e1 5c       	subi	r30, 0xC1	; 193
+    1208:	fe 4f       	sbci	r31, 0xFE	; 254
+    120a:	82 81       	ldd	r24, Z+2	; 0x02
+    120c:	93 81       	ldd	r25, Z+3	; 0x03
+    120e:	8c 3f       	cpi	r24, 0xFC	; 252
+    1210:	9f 4f       	sbci	r25, 0xFF	; 255
+    1212:	68 f4       	brcc	.+26     	; 0x122e <stepper_process_motor+0x348>
+		{
+			stepper_motors_table[index_arg].step++;
+    1214:	8b e0       	ldi	r24, 0x0B	; 11
+    1216:	8c 9f       	mul	r24, r28
+    1218:	f0 01       	movw	r30, r0
+    121a:	8d 9f       	mul	r24, r29
+    121c:	f0 0d       	add	r31, r0
+    121e:	11 24       	eor	r1, r1
+    1220:	ea 50       	subi	r30, 0x0A	; 10
+    1222:	fe 4f       	sbci	r31, 0xFE	; 254
+    1224:	87 81       	ldd	r24, Z+7	; 0x07
+    1226:	90 85       	ldd	r25, Z+8	; 0x08
+    1228:	01 96       	adiw	r24, 0x01	; 1
+    122a:	90 87       	std	Z+8, r25	; 0x08
+    122c:	87 83       	std	Z+7, r24	; 0x07
+		}
+	
+	if( stepper_motors_table[index_arg].speed > stepper_motors_table[index_arg].limit ) stepper_motors_table[index_arg].speed--; //limit and speed a little inconsistent namespace
+    122e:	8b e0       	ldi	r24, 0x0B	; 11
+    1230:	8c 9f       	mul	r24, r28
+    1232:	f0 01       	movw	r30, r0
+    1234:	8d 9f       	mul	r24, r29
+    1236:	f0 0d       	add	r31, r0
+    1238:	11 24       	eor	r1, r1
+    123a:	ea 50       	subi	r30, 0x0A	; 10
+    123c:	fe 4f       	sbci	r31, 0xFE	; 254
+    123e:	94 81       	ldd	r25, Z+4	; 0x04
+    1240:	82 85       	ldd	r24, Z+10	; 0x0a
+    1242:	89 17       	cp	r24, r25
+    1244:	58 f4       	brcc	.+22     	; 0x125c <stepper_process_motor+0x376>
+    1246:	8b e0       	ldi	r24, 0x0B	; 11
+    1248:	8c 9f       	mul	r24, r28
+    124a:	f0 01       	movw	r30, r0
+    124c:	8d 9f       	mul	r24, r29
+    124e:	f0 0d       	add	r31, r0
+    1250:	11 24       	eor	r1, r1
+    1252:	ea 50       	subi	r30, 0x0A	; 10
+    1254:	fe 4f       	sbci	r31, 0xFE	; 254
+    1256:	84 81       	ldd	r24, Z+4	; 0x04
+    1258:	81 50       	subi	r24, 0x01	; 1
+    125a:	84 83       	std	Z+4, r24	; 0x04
+}
+    125c:	df 91       	pop	r29
+    125e:	cf 91       	pop	r28
+    1260:	1f 91       	pop	r17
+    1262:	0f 91       	pop	r16
+    1264:	ff 90       	pop	r15
+    1266:	ef 90       	pop	r14
+    1268:	df 90       	pop	r13
+    126a:	cf 90       	pop	r12
+    126c:	08 95       	ret
+
+0000126e <__vector_9>:
+	TIMSK |= (1<<TOIE0);
+	TCNT0 = 1;
+	TCCR0 |= (1<<CS00); //interrupts and no prescaler so up to <<< 255 instructions
+}
+ISR(TIMER0_OVF_vect)
+{
+    126e:	1f 92       	push	r1
+    1270:	0f 92       	push	r0
+    1272:	0f b6       	in	r0, 0x3f	; 63
+    1274:	0f 92       	push	r0
+    1276:	11 24       	eor	r1, r1
+    1278:	ef 92       	push	r14
+    127a:	ff 92       	push	r15
+    127c:	0f 93       	push	r16
+    127e:	1f 93       	push	r17
+    1280:	2f 93       	push	r18
+    1282:	3f 93       	push	r19
+    1284:	4f 93       	push	r20
+    1286:	5f 93       	push	r21
+    1288:	6f 93       	push	r22
+    128a:	7f 93       	push	r23
+    128c:	8f 93       	push	r24
+    128e:	9f 93       	push	r25
+    1290:	af 93       	push	r26
+    1292:	bf 93       	push	r27
+    1294:	cf 93       	push	r28
+    1296:	df 93       	push	r29
+    1298:	ef 93       	push	r30
+    129a:	ff 93       	push	r31
+    129c:	c0 e0       	ldi	r28, 0x00	; 0
+    129e:	d0 e0       	ldi	r29, 0x00	; 0
+	for(uint8_t index = 0; index < STEPPER_NUM_OF_MOTORS; index++)
+	{
+		if(stepper_motors_table[index].timer == stepper_motors_table[index].speed) 
+    12a0:	1b e0       	ldi	r17, 0x0B	; 11
+    12a2:	7e 01       	movw	r14, r28
+    12a4:	1c 9f       	mul	r17, r28
+    12a6:	f0 01       	movw	r30, r0
+    12a8:	1d 9f       	mul	r17, r29
+    12aa:	f0 0d       	add	r31, r0
+    12ac:	11 24       	eor	r1, r1
+    12ae:	ea 50       	subi	r30, 0x0A	; 10
+    12b0:	fe 4f       	sbci	r31, 0xFE	; 254
+    12b2:	26 81       	ldd	r18, Z+6	; 0x06
+    12b4:	94 81       	ldd	r25, Z+4	; 0x04
+    12b6:	29 13       	cpse	r18, r25
+    12b8:	2c c0       	rjmp	.+88     	; 0x1312 <__vector_9+0xa4>
+		{
+			if(stepper_motors_table[index].orders_head != 0)
+    12ba:	1c 9f       	mul	r17, r28
+    12bc:	f0 01       	movw	r30, r0
+    12be:	1d 9f       	mul	r17, r29
+    12c0:	f0 0d       	add	r31, r0
+    12c2:	11 24       	eor	r1, r1
+    12c4:	ea 50       	subi	r30, 0x0A	; 10
+    12c6:	fe 4f       	sbci	r31, 0xFE	; 254
+    12c8:	85 81       	ldd	r24, Z+5	; 0x05
+    12ca:	88 23       	and	r24, r24
+    12cc:	c9 f0       	breq	.+50     	; 0x1300 <__vector_9+0x92>
+			{
+				uint8_t temp = stepper_motors_orders[stepper_motors_table[index].orders_head].barrier.value;
+    12ce:	df 01       	movw	r26, r30
+    12d0:	e5 81       	ldd	r30, Z+5	; 0x05
+    12d2:	87 e0       	ldi	r24, 0x07	; 7
+    12d4:	e8 9f       	mul	r30, r24
+    12d6:	f0 01       	movw	r30, r0
+    12d8:	11 24       	eor	r1, r1
+    12da:	e1 5c       	subi	r30, 0xC1	; 193
+    12dc:	fe 4f       	sbci	r31, 0xFE	; 254
+    12de:	65 81       	ldd	r22, Z+5	; 0x05
+				enum Orders_Barrier_Device dev = stepper_motors_orders[stepper_motors_table[index].orders_head].barrier.device;
+    12e0:	15 96       	adiw	r26, 0x05	; 5
+    12e2:	ec 91       	ld	r30, X
+    12e4:	87 e0       	ldi	r24, 0x07	; 7
+    12e6:	e8 9f       	mul	r30, r24
+    12e8:	f0 01       	movw	r30, r0
+    12ea:	11 24       	eor	r1, r1
+    12ec:	e1 5c       	subi	r30, 0xC1	; 193
+    12ee:	fe 4f       	sbci	r31, 0xFE	; 254
+    12f0:	84 81       	ldd	r24, Z+4	; 0x04
+				
+				temp = orders_get_barrier(dev, temp);
+    12f2:	0e 94 f9 01 	call	0x3f2	; 0x3f2 <orders_get_barrier>
+				
+				if(temp == 0){
+    12f6:	81 11       	cpse	r24, r1
+    12f8:	03 c0       	rjmp	.+6      	; 0x1300 <__vector_9+0x92>
+					 stepper_process_motor(index);
+    12fa:	8c 2f       	mov	r24, r28
+    12fc:	0e 94 73 07 	call	0xee6	; 0xee6 <stepper_process_motor>
+				}
+			}
+			stepper_motors_table[index].timer = 0;
+    1300:	1e 9d       	mul	r17, r14
+    1302:	f0 01       	movw	r30, r0
+    1304:	1f 9d       	mul	r17, r15
+    1306:	f0 0d       	add	r31, r0
+    1308:	11 24       	eor	r1, r1
+    130a:	ea 50       	subi	r30, 0x0A	; 10
+    130c:	fe 4f       	sbci	r31, 0xFE	; 254
+    130e:	16 82       	std	Z+6, r1	; 0x06
+    1310:	0a c0       	rjmp	.+20     	; 0x1326 <__vector_9+0xb8>
+		}else
+			stepper_motors_table[index].timer++;
+    1312:	1c 9f       	mul	r17, r28
+    1314:	f0 01       	movw	r30, r0
+    1316:	1d 9f       	mul	r17, r29
+    1318:	f0 0d       	add	r31, r0
+    131a:	11 24       	eor	r1, r1
+    131c:	ea 50       	subi	r30, 0x0A	; 10
+    131e:	fe 4f       	sbci	r31, 0xFE	; 254
+    1320:	86 81       	ldd	r24, Z+6	; 0x06
+    1322:	8f 5f       	subi	r24, 0xFF	; 255
+    1324:	86 83       	std	Z+6, r24	; 0x06
+    1326:	21 96       	adiw	r28, 0x01	; 1
+	TCNT0 = 1;
+	TCCR0 |= (1<<CS00); //interrupts and no prescaler so up to <<< 255 instructions
+}
+ISR(TIMER0_OVF_vect)
+{
+	for(uint8_t index = 0; index < STEPPER_NUM_OF_MOTORS; index++)
+    1328:	c4 30       	cpi	r28, 0x04	; 4
+    132a:	d1 05       	cpc	r29, r1
+    132c:	09 f0       	breq	.+2      	; 0x1330 <__vector_9+0xc2>
+    132e:	b9 cf       	rjmp	.-142    	; 0x12a2 <__vector_9+0x34>
+    1330:	04 c0       	rjmp	.+8      	; 0x133a <__vector_9+0xcc>
+	}
+	for(uint8_t index = 0; index < SERVO_NUM_OF_SERVOS; index++)
+	{
+		if(servo_servos_table[index].orders_head != 0)
+		{
+			servo_process_servo(index);
+    1332:	80 e0       	ldi	r24, 0x00	; 0
+    1334:	0e 94 1f 06 	call	0xc3e	; 0xc3e <servo_process_servo>
+    1338:	04 c0       	rjmp	.+8      	; 0x1342 <__vector_9+0xd4>
+		}else
+			stepper_motors_table[index].timer++;
+	}
+	for(uint8_t index = 0; index < SERVO_NUM_OF_SERVOS; index++)
+	{
+		if(servo_servos_table[index].orders_head != 0)
+    133a:	80 91 e9 00 	lds	r24, 0x00E9	; 0x8000e9 <servo_servos_table+0x6>
+    133e:	81 11       	cpse	r24, r1
+    1340:	f8 cf       	rjmp	.-16     	; 0x1332 <__vector_9+0xc4>
+		{
+			servo_process_servo(index);
+		}
+	}
+}
+    1342:	ff 91       	pop	r31
+    1344:	ef 91       	pop	r30
+    1346:	df 91       	pop	r29
+    1348:	cf 91       	pop	r28
+    134a:	bf 91       	pop	r27
+    134c:	af 91       	pop	r26
+    134e:	9f 91       	pop	r25
+    1350:	8f 91       	pop	r24
+    1352:	7f 91       	pop	r23
+    1354:	6f 91       	pop	r22
+    1356:	5f 91       	pop	r21
+    1358:	4f 91       	pop	r20
+    135a:	3f 91       	pop	r19
+    135c:	2f 91       	pop	r18
+    135e:	1f 91       	pop	r17
+    1360:	0f 91       	pop	r16
+    1362:	ff 90       	pop	r15
+    1364:	ef 90       	pop	r14
+    1366:	0f 90       	pop	r0
+    1368:	0f be       	out	0x3f, r0	; 63
+    136a:	0f 90       	pop	r0
+    136c:	1f 90       	pop	r1
+    136e:	18 95       	reti
+
+00001370 <stepper_push_back_order>:
+			}  
+	}
+}
+void stepper_push_back_order(uint8_t index_arg,uint16_t limit_arg,enum StepperDirection direction_arg,
+							 uint8_t customer_barrier_arg, uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_type_arg)
+{	
+    1370:	cf 92       	push	r12
+    1372:	df 92       	push	r13
+    1374:	ef 92       	push	r14
+    1376:	0f 93       	push	r16
+    1378:	1f 93       	push	r17
+    137a:	cf 93       	push	r28
+    137c:	df 93       	push	r29
+    137e:	00 d0       	rcall	.+0      	; 0x1380 <stepper_push_back_order+0x10>
+    1380:	cd b7       	in	r28, 0x3d	; 61
+    1382:	de b7       	in	r29, 0x3e	; 62
+    1384:	18 2f       	mov	r17, r24
+	volatile uint8_t i;
+	for(i=1;i<STEPPER_ORDERS_TOTAL_NUMBER;i++)
+    1386:	81 e0       	ldi	r24, 0x01	; 1
+    1388:	89 83       	std	Y+1, r24	; 0x01
+    138a:	89 81       	ldd	r24, Y+1	; 0x01
+    138c:	88 31       	cpi	r24, 0x18	; 24
+    138e:	08 f0       	brcs	.+2      	; 0x1392 <stepper_push_back_order+0x22>
+    1390:	5c c0       	rjmp	.+184    	; 0x144a <stepper_push_back_order+0xda>
+	{
+		if(stepper_motors_orders[i].move == 0)
+    1392:	e9 81       	ldd	r30, Y+1	; 0x01
+    1394:	87 e0       	ldi	r24, 0x07	; 7
+    1396:	e8 9f       	mul	r30, r24
+    1398:	f0 01       	movw	r30, r0
+    139a:	11 24       	eor	r1, r1
+    139c:	e1 5c       	subi	r30, 0xC1	; 193
+    139e:	fe 4f       	sbci	r31, 0xFE	; 254
+    13a0:	82 81       	ldd	r24, Z+2	; 0x02
+    13a2:	93 81       	ldd	r25, Z+3	; 0x03
+    13a4:	89 2b       	or	r24, r25
+    13a6:	09 f0       	breq	.+2      	; 0x13aa <stepper_push_back_order+0x3a>
+    13a8:	49 c0       	rjmp	.+146    	; 0x143c <stepper_push_back_order+0xcc>
+    13aa:	0c c0       	rjmp	.+24     	; 0x13c4 <stepper_push_back_order+0x54>
+    13ac:	e9 81       	ldd	r30, Y+1	; 0x01
+    13ae:	97 e0       	ldi	r25, 0x07	; 7
+    13b0:	e9 9f       	mul	r30, r25
+    13b2:	f0 01       	movw	r30, r0
+    13b4:	11 24       	eor	r1, r1
+    13b6:	e1 5c       	subi	r30, 0xC1	; 193
+    13b8:	fe 4f       	sbci	r31, 0xFE	; 254
+    13ba:	02 80       	ldd	r0, Z+2	; 0x02
+    13bc:	f3 81       	ldd	r31, Z+3	; 0x03
+    13be:	e0 2d       	mov	r30, r0
+    13c0:	ef 2b       	or	r30, r31
+    13c2:	e1 f5       	brne	.+120    	; 0x143c <stepper_push_back_order+0xcc>
+		{
+			stepper_motors_orders[i].customer_index = customer_index_arg;
+    13c4:	e9 81       	ldd	r30, Y+1	; 0x01
+    13c6:	87 e0       	ldi	r24, 0x07	; 7
+    13c8:	e8 9f       	mul	r30, r24
+    13ca:	f0 01       	movw	r30, r0
+    13cc:	11 24       	eor	r1, r1
+    13ce:	e1 5c       	subi	r30, 0xC1	; 193
+    13d0:	fe 4f       	sbci	r31, 0xFE	; 254
+    13d2:	00 83       	st	Z, r16
+			stepper_motors_orders[i].next = 0;
+    13d4:	e9 81       	ldd	r30, Y+1	; 0x01
+    13d6:	97 e0       	ldi	r25, 0x07	; 7
+    13d8:	e9 9f       	mul	r30, r25
+    13da:	f0 01       	movw	r30, r0
+    13dc:	11 24       	eor	r1, r1
+    13de:	e1 5c       	subi	r30, 0xC1	; 193
+    13e0:	fe 4f       	sbci	r31, 0xFE	; 254
+    13e2:	16 82       	std	Z+6, r1	; 0x06
+			stepper_motors_orders[i].direction = direction_arg;
+    13e4:	e9 81       	ldd	r30, Y+1	; 0x01
+    13e6:	87 e0       	ldi	r24, 0x07	; 7
+    13e8:	e8 9f       	mul	r30, r24
+    13ea:	f0 01       	movw	r30, r0
+    13ec:	11 24       	eor	r1, r1
+    13ee:	e1 5c       	subi	r30, 0xC1	; 193
+    13f0:	fe 4f       	sbci	r31, 0xFE	; 254
+    13f2:	41 83       	std	Z+1, r20	; 0x01
+			stepper_motors_orders[i].move = limit_arg;
+    13f4:	e9 81       	ldd	r30, Y+1	; 0x01
+    13f6:	97 e0       	ldi	r25, 0x07	; 7
+    13f8:	e9 9f       	mul	r30, r25
+    13fa:	f0 01       	movw	r30, r0
+    13fc:	11 24       	eor	r1, r1
+    13fe:	e1 5c       	subi	r30, 0xC1	; 193
+    1400:	fe 4f       	sbci	r31, 0xFE	; 254
+    1402:	73 83       	std	Z+3, r23	; 0x03
+    1404:	62 83       	std	Z+2, r22	; 0x02
+			stepper_motors_orders[i].barrier.device = barrier_type_arg; //here its not customers barrier
+    1406:	e9 81       	ldd	r30, Y+1	; 0x01
+    1408:	87 e0       	ldi	r24, 0x07	; 7
+    140a:	e8 9f       	mul	r30, r24
+    140c:	f0 01       	movw	r30, r0
+    140e:	11 24       	eor	r1, r1
+    1410:	e1 5c       	subi	r30, 0xC1	; 193
+    1412:	fe 4f       	sbci	r31, 0xFE	; 254
+    1414:	e4 82       	std	Z+4, r14	; 0x04
+			stepper_motors_orders[i].barrier.value = orders_get_barrier_index(barrier_type_arg, customer_barrier_arg);
+    1416:	c9 80       	ldd	r12, Y+1	; 0x01
+    1418:	d1 2c       	mov	r13, r1
+    141a:	62 2f       	mov	r22, r18
+    141c:	8e 2d       	mov	r24, r14
+    141e:	0e 94 28 02 	call	0x450	; 0x450 <orders_get_barrier_index>
+    1422:	f6 01       	movw	r30, r12
+    1424:	ee 0f       	add	r30, r30
+    1426:	ff 1f       	adc	r31, r31
+    1428:	ee 0f       	add	r30, r30
+    142a:	ff 1f       	adc	r31, r31
+    142c:	ee 0f       	add	r30, r30
+    142e:	ff 1f       	adc	r31, r31
+    1430:	ec 19       	sub	r30, r12
+    1432:	fd 09       	sbc	r31, r13
+    1434:	e1 5c       	subi	r30, 0xC1	; 193
+    1436:	fe 4f       	sbci	r31, 0xFE	; 254
+    1438:	85 83       	std	Z+5, r24	; 0x05
+			break;
+    143a:	07 c0       	rjmp	.+14     	; 0x144a <stepper_push_back_order+0xda>
+}
+void stepper_push_back_order(uint8_t index_arg,uint16_t limit_arg,enum StepperDirection direction_arg,
+							 uint8_t customer_barrier_arg, uint8_t customer_index_arg, enum Orders_Barrier_Device barrier_type_arg)
+{	
+	volatile uint8_t i;
+	for(i=1;i<STEPPER_ORDERS_TOTAL_NUMBER;i++)
+    143c:	99 81       	ldd	r25, Y+1	; 0x01
+    143e:	9f 5f       	subi	r25, 0xFF	; 255
+    1440:	99 83       	std	Y+1, r25	; 0x01
+    1442:	99 81       	ldd	r25, Y+1	; 0x01
+    1444:	98 31       	cpi	r25, 0x18	; 24
+    1446:	08 f4       	brcc	.+2      	; 0x144a <stepper_push_back_order+0xda>
+    1448:	b1 cf       	rjmp	.-158    	; 0x13ac <stepper_push_back_order+0x3c>
+			stepper_motors_orders[i].barrier.device = barrier_type_arg; //here its not customers barrier
+			stepper_motors_orders[i].barrier.value = orders_get_barrier_index(barrier_type_arg, customer_barrier_arg);
+			break;
+		}
+	}
+	volatile uint8_t temp = stepper_motors_table[index_arg].orders_head;	
+    144a:	81 2f       	mov	r24, r17
+    144c:	90 e0       	ldi	r25, 0x00	; 0
+    144e:	2b e0       	ldi	r18, 0x0B	; 11
+    1450:	12 9f       	mul	r17, r18
+    1452:	f0 01       	movw	r30, r0
+    1454:	11 24       	eor	r1, r1
+    1456:	ea 50       	subi	r30, 0x0A	; 10
+    1458:	fe 4f       	sbci	r31, 0xFE	; 254
+    145a:	25 81       	ldd	r18, Z+5	; 0x05
+    145c:	2a 83       	std	Y+2, r18	; 0x02
+	
+	if(temp != 0)
+    145e:	2a 81       	ldd	r18, Y+2	; 0x02
+    1460:	22 23       	and	r18, r18
+    1462:	39 f1       	breq	.+78     	; 0x14b2 <stepper_push_back_order+0x142>
+	{
+		while(stepper_motors_orders[temp].next != 0) temp = stepper_motors_orders[temp].next;
+    1464:	ea 81       	ldd	r30, Y+2	; 0x02
+    1466:	87 e0       	ldi	r24, 0x07	; 7
+    1468:	e8 9f       	mul	r30, r24
+    146a:	f0 01       	movw	r30, r0
+    146c:	11 24       	eor	r1, r1
+    146e:	e1 5c       	subi	r30, 0xC1	; 193
+    1470:	fe 4f       	sbci	r31, 0xFE	; 254
+    1472:	86 81       	ldd	r24, Z+6	; 0x06
+    1474:	88 23       	and	r24, r24
+    1476:	99 f0       	breq	.+38     	; 0x149e <stepper_push_back_order+0x12e>
+    1478:	ea 81       	ldd	r30, Y+2	; 0x02
+    147a:	97 e0       	ldi	r25, 0x07	; 7
+    147c:	e9 9f       	mul	r30, r25
+    147e:	f0 01       	movw	r30, r0
+    1480:	11 24       	eor	r1, r1
+    1482:	e1 5c       	subi	r30, 0xC1	; 193
+    1484:	fe 4f       	sbci	r31, 0xFE	; 254
+    1486:	86 81       	ldd	r24, Z+6	; 0x06
+    1488:	8a 83       	std	Y+2, r24	; 0x02
+    148a:	ea 81       	ldd	r30, Y+2	; 0x02
+    148c:	27 e0       	ldi	r18, 0x07	; 7
+    148e:	e2 9f       	mul	r30, r18
+    1490:	f0 01       	movw	r30, r0
+    1492:	11 24       	eor	r1, r1
+    1494:	e1 5c       	subi	r30, 0xC1	; 193
+    1496:	fe 4f       	sbci	r31, 0xFE	; 254
+    1498:	86 81       	ldd	r24, Z+6	; 0x06
+    149a:	81 11       	cpse	r24, r1
+    149c:	ed cf       	rjmp	.-38     	; 0x1478 <stepper_push_back_order+0x108>
+		stepper_motors_orders[temp].next = i;
+    149e:	ea 81       	ldd	r30, Y+2	; 0x02
+    14a0:	89 81       	ldd	r24, Y+1	; 0x01
+    14a2:	97 e0       	ldi	r25, 0x07	; 7
+    14a4:	e9 9f       	mul	r30, r25
+    14a6:	f0 01       	movw	r30, r0
+    14a8:	11 24       	eor	r1, r1
+    14aa:	e1 5c       	subi	r30, 0xC1	; 193
+    14ac:	fe 4f       	sbci	r31, 0xFE	; 254
+    14ae:	86 83       	std	Z+6, r24	; 0x06
+    14b0:	28 c0       	rjmp	.+80     	; 0x1502 <stepper_push_back_order+0x192>
+	}
+	else
+		{
+			if(stepper_motors_orders[i].direction == CLOCKWISE) 
+    14b2:	e9 81       	ldd	r30, Y+1	; 0x01
+    14b4:	27 e0       	ldi	r18, 0x07	; 7
+    14b6:	e2 9f       	mul	r30, r18
+    14b8:	f0 01       	movw	r30, r0
+    14ba:	11 24       	eor	r1, r1
+    14bc:	e1 5c       	subi	r30, 0xC1	; 193
+    14be:	fe 4f       	sbci	r31, 0xFE	; 254
+    14c0:	21 81       	ldd	r18, Z+1	; 0x01
+    14c2:	21 11       	cpse	r18, r1
+    14c4:	0a c0       	rjmp	.+20     	; 0x14da <stepper_push_back_order+0x16a>
+				stepper_motors_table[index_arg].mode = PHASE_A;
+    14c6:	2b e0       	ldi	r18, 0x0B	; 11
+    14c8:	28 9f       	mul	r18, r24
+    14ca:	f0 01       	movw	r30, r0
+    14cc:	29 9f       	mul	r18, r25
+    14ce:	f0 0d       	add	r31, r0
+    14d0:	11 24       	eor	r1, r1
+    14d2:	ea 50       	subi	r30, 0x0A	; 10
+    14d4:	fe 4f       	sbci	r31, 0xFE	; 254
+    14d6:	11 86       	std	Z+9, r1	; 0x09
+    14d8:	0a c0       	rjmp	.+20     	; 0x14ee <stepper_push_back_order+0x17e>
+			else 
+				stepper_motors_table[index_arg].mode = PHASE_D;
+    14da:	2b e0       	ldi	r18, 0x0B	; 11
+    14dc:	28 9f       	mul	r18, r24
+    14de:	f0 01       	movw	r30, r0
+    14e0:	29 9f       	mul	r18, r25
+    14e2:	f0 0d       	add	r31, r0
+    14e4:	11 24       	eor	r1, r1
+    14e6:	ea 50       	subi	r30, 0x0A	; 10
+    14e8:	fe 4f       	sbci	r31, 0xFE	; 254
+    14ea:	23 e0       	ldi	r18, 0x03	; 3
+    14ec:	21 87       	std	Z+9, r18	; 0x09
+			
+			stepper_motors_table[index_arg].orders_head = i;
+    14ee:	29 81       	ldd	r18, Y+1	; 0x01
+    14f0:	3b e0       	ldi	r19, 0x0B	; 11
+    14f2:	38 9f       	mul	r19, r24
+    14f4:	f0 01       	movw	r30, r0
+    14f6:	39 9f       	mul	r19, r25
+    14f8:	f0 0d       	add	r31, r0
+    14fa:	11 24       	eor	r1, r1
+    14fc:	ea 50       	subi	r30, 0x0A	; 10
+    14fe:	fe 4f       	sbci	r31, 0xFE	; 254
+    1500:	25 83       	std	Z+5, r18	; 0x05
+		}
+    1502:	0f 90       	pop	r0
+    1504:	0f 90       	pop	r0
+    1506:	df 91       	pop	r29
+    1508:	cf 91       	pop	r28
+    150a:	1f 91       	pop	r17
+    150c:	0f 91       	pop	r16
+    150e:	ef 90       	pop	r14
+    1510:	df 90       	pop	r13
+    1512:	cf 90       	pop	r12
+    1514:	08 95       	ret
+
+00001516 <_exit>:
+    1516:	f8 94       	cli
+
+00001518 <__stop_program>:
+    1518:	ff cf       	rjmp	.-2      	; 0x1518 <__stop_program>
